@@ -4,7 +4,8 @@
   "description": "Algerian News Webscraper",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js" 
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/HarrouAnderrahman/DZNews/issues"
   },
-  "homepage": "https://github.com/HarrouAnderrahman/DZNews#readme"
+  "homepage": "https://github.com/HarrouAnderrahman/DZNews#readme",
+  "dependencies": {
+    "axios": "^1.11.0",
+    "cheerio": "^1.1.2"
+  }
 }
