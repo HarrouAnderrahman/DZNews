@@ -1,0 +1,23 @@
+{
+  "name": "dznews",
+  "version": "1.0.0",
+  "description": "Algerian News Webscraper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HarrouAnderrahman/DZNews.git"
+  },
+  "keywords": [
+    "Algerian",
+    "News"
+  ],
+  "author": "Harrou Abderrahman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/HarrouAnderrahman/DZNews/issues"
+  },
+  "homepage": "https://github.com/HarrouAnderrahman/DZNews#readme"
+}
