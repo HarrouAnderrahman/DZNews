@@ -5,7 +5,7 @@ const fs = require('fs')
 const scrapedData = [];
 const pages = 3;
 const urls = []
-for (i = 0;i<pages;i++){
+for (let i = 1;i<=pages;i++){
     let page = `https://www.ennaharonline.com/algeria/page/${i}/`
     urls.push(page)
 }
@@ -24,7 +24,7 @@ async function scrape() {
                 scrapedData.push({
                     'title':header,
                     'date':date
-                })
+                }) // todo: make the script stops after the date = day-7
                 }
             }
         }
