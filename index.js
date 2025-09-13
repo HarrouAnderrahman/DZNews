@@ -1,9 +1,10 @@
 const axios = require('axios'); 
 const cheerio = require('cheerio');
+const { error } = require('console');
 const fs = require('fs')
 
 const scrapedData = [];
-const pages = 3;
+const pages = 1; // number of pages i want to scrape
 const urls = []
 for (let i = 1;i<=pages;i++){
     let page = `https://www.ennaharonline.com/algeria/page/${i}/`
@@ -20,11 +21,21 @@ async function scrape() {
             for (const news of totalNews ){
                 const header = $(news).find('.bunh').text()
                 const date = $(news).find('.card__mfit').attr('datetime')
+                const link = $(news).find('.bunh').attr('href') // lets scrape this page too
+                const pageContent = await axios.get(link)
+                const $1 = cheerio.load(pageContent.data)
+                const author = ($1('.sgb1__amta').find('[href="#"]').text()).replace("\n\t\t\t\t\t\t\t\t\t\t\t", "")
+                const content = $1('.artx').find('p').text()
                 if(date){
                 scrapedData.push({
                     'title':header,
-                    'date':date
-                }) // todo: make the script stops after the date = day-7
+                    'date':date,
+                    'link':link,
+                    'content':{
+                        'author':author,
+                        'content':content
+                    }
+                })
                 }
             }
         }
