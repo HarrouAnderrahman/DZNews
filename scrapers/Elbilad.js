@@ -16,7 +16,7 @@ async function run() {
         (articl) =>{ 
              const title = articl.querySelector('h3').textContent.trim()
              scrapedData.push({
-                title: title
+                'title': title
              })
             }
     ))
