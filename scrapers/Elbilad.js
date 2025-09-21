@@ -18,7 +18,7 @@ async function run() {
     ))
     await browser.close();
     const filteredData = scrapedData.filter(item => item.title); // to remove null values
-    fs.writeFile('ElbiladData.JSON', JSON.stringify(filteredData),(err)=>{
+    fs.writeFile('ElbiladData.json', JSON.stringify(filteredData),(err)=>{
         if (err) throw error
         console.log('File Saved!')
     })
