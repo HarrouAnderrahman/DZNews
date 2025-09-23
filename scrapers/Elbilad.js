@@ -1,9 +1,12 @@
 const { error } = require('console');
 const fs = require('fs')
 const puppeteer = require('puppeteer')
+const axios = require('axios')
+const cheerio = require ('cheerio')
 
 async function run() {
     let browser;
+    let scrapedData = [];
     try {
         browser = await puppeteer.launch();
         console.log('Opening Browser ...')
@@ -21,15 +24,35 @@ async function run() {
         console.log('Accessing Elbilad ...')
         await page.waitForSelector('#categoryArticles > ul > li');
         console.log('Extracting News ...')
-        let scrapedData = await page.$$eval('#categoryArticles > ul > li', news => news.map(
-            (articl) =>{ 
+        let scraped = await page.$$eval('#categoryArticles > ul > li', news => news.map(
+        (articl) =>{ 
                 const title = articl.querySelector('h3')?.textContent.trim() || ''
                 const link = articl.querySelector('h3 > a')?.href || ''
-                return {title, link}
-                }
+                return ({title,link})
+            }
         ))
-        const filteredData = scrapedData.filter(item => item.title); // to remove null values
-        fs.writeFile('ElbiladData.json', JSON.stringify(filteredData),(err)=>{
+        for (let articl of scraped ){
+            if (articl.link){
+                        const response = await axios.get(articl.link)
+                        if (response.status == 200){
+                            console.log('scraping context...')
+                            const html = await response.data
+                            const $ = cheerio.load(html)
+                            const contextData = $('.cols-a').find('p').text().replace("{{ key }}: {{ error[0] }}\n        بريدك الالكتروني\n        \n        اشتراك\n    10922 V 27500 7/8Satellite : Nilesat 7.0 ° West", "")
+                            scrapedData.push({
+                                'title': articl.title,
+                                'link': articl.link,
+                                'context': contextData
+                            })
+                        }
+                        else {
+                            throw new Error("Failed scraping the context")
+                        }
+            } else {
+                continue;
+            }
+        }
+        await fs.writeFile('ElbiladData.json', JSON.stringify(scrapedData),(err)=>{
         if (err) throw err
         console.log('File Saved!')
     })
