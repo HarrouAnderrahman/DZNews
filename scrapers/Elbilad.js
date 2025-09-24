@@ -4,6 +4,8 @@ const puppeteer = require('puppeteer')
 const axios = require('axios')
 const cheerio = require ('cheerio')
 
+
+
 async function run() {
     let browser;
     let scrapedData = [];
@@ -28,7 +30,8 @@ async function run() {
         (articl) =>{ 
                 const title = articl.querySelector('h3')?.textContent.trim() || ''
                 const link = articl.querySelector('h3 > a')?.href || ''
-                return ({title,link})
+                const date = articl.querySelector('ul > li:nth-child(3)')?.textContent.trim() || ''
+                return ({title,link,date})
             }
         ))
         for (let articl of scraped ){
@@ -38,11 +41,16 @@ async function run() {
                             console.log('scraping context...')
                             const html = await response.data
                             const $ = cheerio.load(html)
-                            const contextData = $('.cols-a').find('p').text().replace("{{ key }}: {{ error[0] }}\n        بريدك الالكتروني\n        \n        اشتراك\n    10922 V 27500 7/8Satellite : Nilesat 7.0 ° West", "")
+                            const contentData = $('.cols-a').find('p').text().replace("{{ key }}: {{ error[0] }}\n        بريدك الالكتروني\n        \n        اشتراك\n    10922 V 27500 7/8Satellite : Nilesat 7.0 ° West", "")
+                            const author = $('.title').find('.strong')?.text() || 'no author'
                             scrapedData.push({
                                 'title': articl.title,
                                 'link': articl.link,
-                                'context': contextData
+                                'date': articl.date,
+                                'content': {
+                                    'contentData':contentData,
+                                    'author':author
+                                }
                             })
                         }
                         else {
