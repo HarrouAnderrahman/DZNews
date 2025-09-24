@@ -14,18 +14,19 @@ async function run(choosenDate) {
     let browser;
     let scrapedData = [];
     try {
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch({headless:false});
         console.log('Opening Browser ...')
         const page = await browser.newPage();
-        await page.setRequestInterception(true);// make it skip loading the unnecessary things to make the loading faster
-        page.on('request', (req) => {
-            if (['image', 'stylesheet', 'font'].includes(req.resourceType())) {
-                req.abort();
-            } 
-            else {
-                req.continue();
-            }
-        });
+        // The reason i commented this is because it was hiding the button
+        // await page.setRequestInterception(true);
+        // page.on('request', (req) => {
+        //     if (['image', 'stylesheet', 'font'].includes(req.resourceType())) {
+        //         req.abort();
+        //     } 
+        //     else {
+        //         req.continue();
+        //     }
+        // });
         await page.goto('https://www.elbilad.net/national')
         console.log('Accessing Elbilad ...')
         await page.waitForSelector('#categoryArticles > ul > li');
@@ -40,19 +41,17 @@ async function run(choosenDate) {
                 `#categoryArticles > ul > li:nth-child(${articlCount}) > ul > li:nth-child(3)`,
                  date => date.textContent.trim())
             let stopDate = await transformDate(extractLastDate);
-            console.log(stopDate)
             if (choosenDate < stopDate){
                 await page.waitForSelector("#categoryArticles > ul > li.link-btn")
                 await page.click("#categoryArticles > ul > li.link-btn")
                 console.log('clicked the load more button...')
                 await page.waitForFunction(
                     prevCount => {
-                        document.querySelector("#categoryArticles > ul > li").length - 1 > prevCount
+                        return document.querySelectorAll("#categoryArticles > ul > li").length - 1 > prevCount
                     },
-                    {}, // no options
+                    {timeout: 10000}, // no options
                     articlCount // <<--- this is passed as prevCount
                 )
-                articlCount += 10
             } else {
                 keepGoing = false
                 let scraped = await page.$$eval('#categoryArticles > ul > li', news => news.map(
