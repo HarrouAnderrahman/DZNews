@@ -1,0 +1,116 @@
+const fs = require('fs')
+const puppeteer = require('puppeteer')
+const axios = require('axios')
+const cheerio = require ('cheerio')
+
+// I need to make it so the user chooses a date and it will scrape until the date is due
+
+
+const userDate = new Date('2025-09-15')
+
+
+// first lemme just make a function that transform the articl date to a valid js date
+// i dont need to make this function for this site since it gives a valid date
+
+async function run(choosenDate) {
+    let browser;
+    let scrapedData = [];
+    try {
+        browser = await puppeteer.launch(
+            // {headless:false} // <-- For debugging
+        );
+        console.log('Opening Browser ...')
+
+        const page = await browser.newPage();
+
+        await page.goto("https://algeriemaintenant.dz/category/%d8%af%d9%88%d9%84%d9%8a/")
+
+        console.log('Accessing Algeriemaintenant ...')
+
+        await page.waitForSelector("body > div.arcv > div > div > div.arcv__main > div > div.arcv__ccar"); // waiting for the news to load so it doesn't mess up
+        console.log('Checking News ...')
+        // makign a while loop to extract only news that's after the user's choosen date
+        let keepGoing = true
+
+        while (keepGoing){
+            let articlCount = await page.$$eval(
+                "body > div.arcv > div > div > div.arcv__main > div > div.arcv__ccar > article.art1",
+                 articleNum => articleNum.length + 1) 
+            console.log(`Loaded articles : ${articlCount}`)
+            let extractLastDate = await page.$eval(
+                `body > div.arcv > div > div > div.arcv__main > div > div.arcv__ccar > article:nth-child(${articlCount}) > div > div.datl.d-f > time`,
+                 date => date.dateTime) // the date is valid so it doesnt need any date manipulation
+
+            console.log(`Last loaded date : ${extractLastDate}`)
+
+            let stopDate = new Date(extractLastDate)
+
+            if (choosenDate < stopDate){
+                await page.waitForSelector("#lda_request") // the button id
+
+                await page.click("#lda_request")
+
+                console.log('clicked the load more button...')
+
+                await page.waitForFunction( // this code will wait for other articles to load after pressing the button
+                    prevCount => {
+                        return document.querySelectorAll("body > div.arcv > div > div > div.arcv__main > div > div.arcv__ccar > article.art1").length + 1 > prevCount
+                    },
+                    {timeout: 10000},
+                    articlCount // <<--- this is passed as prevCount
+                )
+            } else {
+                keepGoing = false // after we make sure the needed news are scraped we can start scraping
+                let scraped = await page.$$eval('body > div.arcv > div > div > div.arcv__main > div > div.arcv__ccar > article.art1', news => news.map(
+                (articl) =>{ 
+                    const title = articl.querySelector('h2')?.textContent.trim() || ''
+                    const link = articl.querySelector('h2 > a')?.href || ''
+                    const date = articl.querySelector("div > div.datl.d-f > time")?.dateTime || ''
+                    return ({title,link,date})
+                }
+            ))
+            for (let articl of scraped ){
+                if (articl.link){ 
+                            const response = await axios.get(articl.link)
+                            const dateObj = new Date(articl.date) // so i can compare it
+                            // The issue: the scraper is scraping every link including the ones that passed the choosenDate and i need to fix that
+                            if (choosenDate < dateObj){
+                                if (response.status == 200){
+                                    console.log('scraping content...')
+                                    const html = await response.data
+                                    const $ = cheerio.load(html)
+                                    const contentData = $('.article__txt').text()
+                                    const author = $('.article__author-name')?.text() || 'no author'
+                                    scrapedData.push({
+                                        'title': articl.title,
+                                        'link': articl.link,
+                                        'date': dateObj,
+                                        'content': {
+                                            'contentData':contentData,
+                                            'author':author
+                                        }
+                                    })
+                                    }
+                                else {
+                                    throw new Error("Failed scraping the context")
+                                }
+                            }
+                } else {
+                    continue;
+                }
+            }
+            }
+        }
+            await fs.writeFile('AlgeriemaintenantData.json', JSON.stringify(scrapedData),(err)=>{
+            if (err) throw err
+            console.log('File Saved!')
+        })
+    }
+    catch (error){
+        console.error(error)
+    }
+    finally{
+        await browser.close();
+    }
+}
+run(userDate);
