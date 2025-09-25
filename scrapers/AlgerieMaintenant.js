@@ -5,25 +5,48 @@ const cheerio = require ('cheerio')
 
 // I need to make it so the user chooses a date and it will scrape until the date is due
 
+const Datestr = "2025-09-18"
+const userDate = new Date(Datestr) // i made the date on 2 seperate variables so i can refrence the str in the json file when saving
 
-const userDate = new Date('2025-09-15')
 
+// why not let the user choose the news category
+const category = [
+    "الحدث",
+    "سياسة",
+    "اقتصاد",
+    "مجتمع",
+    "ثقافة-و-فن",
+    "رياضة",
+    "دولي"
+]
 
 // first lemme just make a function that transform the articl date to a valid js date
 // i dont need to make this function for this site since it gives a valid date
 
-async function run(choosenDate) {
+async function run(choosenDate, choosenCategory) {
+    console.log(`Scraping the ${choosenCategory} category, until ${Datestr}`)
     let browser;
     let scrapedData = [];
     try {
         browser = await puppeteer.launch(
-            // {headless:false} // <-- For debugging
+            {headless:false} // <-- For debugging
         );
         console.log('Opening Browser ...')
 
         const page = await browser.newPage();
 
-        await page.goto("https://algeriemaintenant.dz/category/%d8%af%d9%88%d9%84%d9%8a/")
+        // making the scraper skipping images
+        await page.setRequestInterception(true);
+        page.on('request', (req) => {
+            if (['image'].includes(req.resourceType())) {
+                req.abort();
+            } 
+            else {
+                req.continue();
+            }
+        }); // <-- The reason is to make it load faster
+
+        await page.goto(`https://algeriemaintenant.dz/category/${choosenCategory}/`)
 
         console.log('Accessing Algeriemaintenant ...')
 
@@ -79,7 +102,7 @@ async function run(choosenDate) {
                                     console.log('scraping content...')
                                     const html = await response.data
                                     const $ = cheerio.load(html)
-                                    const contentData = $('.article__txt').text()
+                                    const contentData = $('.article__txt').text().replace("\n\t\t\t\t\t\t\t\t", "")
                                     const author = $('.article__author-name')?.text() || 'no author'
                                     scrapedData.push({
                                         'title': articl.title,
@@ -101,7 +124,7 @@ async function run(choosenDate) {
             }
             }
         }
-            await fs.writeFile('AlgeriemaintenantData.json', JSON.stringify(scrapedData),(err)=>{
+            await fs.writeFile(`AlgeriemaintenantData_${Datestr}_${choosenCategory}.json`, JSON.stringify(scrapedData),(err)=>{
             if (err) throw err
             console.log('File Saved!')
         })
@@ -113,4 +136,4 @@ async function run(choosenDate) {
         await browser.close();
     }
 }
-run(userDate);
+run(userDate, category[4]);

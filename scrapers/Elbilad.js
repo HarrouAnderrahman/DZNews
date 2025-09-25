@@ -4,13 +4,34 @@ const axios = require('axios')
 const cheerio = require ('cheerio')
 
 // I need to make it so the user chooses a date and it will scrape until the date is due
-const userDate = new Date('2025-09-23')
+
+
+const Datestr = "2025-09-18"
+const userDate = new Date(Datestr) // i made the date on 2 seperate variables so i can refrence the str in the json file when saving
+
+
+//let the user choose the news category
+const category = [
+    "national",
+    "derniere-info",
+    "economique",
+    "sports",
+    "observateur",
+    "international"
+]
+
+
 // first lemme just make a function that transform the articl date to a valid js date
+
+
 async function transformDate(str) {
     let [stopDay, stopMonth, stopYear] = str.split('-')
-    return new Date(`${stopYear}-${stopMonth}-${stopDay}`)
+    return new Date(`${stopYear}-${stopMonth}-${stopDay}`)// need it so it transforms elbilad invalid date to a valid one
 }
-async function run(choosenDate) {
+
+
+async function run(choosenDate, choosenCategory) {
+    console.log(`Scraping the ${choosenCategory} category, until ${Datestr}`)
     let browser;
     let scrapedData = [];
     try {
@@ -19,35 +40,45 @@ async function run(choosenDate) {
         );
         console.log('Opening Browser ...')
         const page = await browser.newPage();
-        // The reason i commented this is because it was hiding the button
-        // await page.setRequestInterception(true);
-        // page.on('request', (req) => {
-        //     if (['image', 'stylesheet', 'font'].includes(req.resourceType())) {
-        //         req.abort();
-        //     } 
-        //     else {
-        //         req.continue();
-        //     }
-        // });
-        await page.goto('https://www.elbilad.net/national')
+        
+        // Make it skip loading images :
+        await page.setRequestInterception(true);
+        page.on('request', (req) => {
+            if (['image'].includes(req.resourceType())) {
+                req.abort();
+            } 
+            else {
+                req.continue();
+            } // <-- reason is to make it faster and resource efficient
+        });
+
+
+        await page.goto(`https://www.elbilad.net/${choosenCategory}`)
+
         console.log('Accessing Elbilad ...')
+
         await page.waitForSelector('#categoryArticles > ul > li');
+
         console.log('Checking News ...')
         // makign a while loop to extract only news that's after the user's choosen date
         let keepGoing = true
+
         while (keepGoing){
             let articlCount = await page.$$eval(
                 '#categoryArticles > ul > li',
-                 articleNum => articleNum.length - 1)
+                 articleNum => articleNum.length - 1) // to know the last article's number and use it as an id
+
             let extractLastDate = await page.$eval(
                 `#categoryArticles > ul > li:nth-child(${articlCount}) > ul > li:nth-child(3)`,
                  date => date.textContent.trim())
+
             let stopDate = await transformDate(extractLastDate);
+
             if (choosenDate < stopDate){
                 await page.waitForSelector("#categoryArticles > ul > li.link-btn")
                 await page.click("#categoryArticles > ul > li.link-btn")
                 console.log('clicked the load more button...')
-                await page.waitForFunction(
+                await page.waitForFunction( // so it doesn't scrape until  it loads more news when the button is clicked
                     prevCount => {
                         return document.querySelectorAll("#categoryArticles > ul > li").length - 1 > prevCount
                     },
@@ -67,8 +98,7 @@ async function run(choosenDate) {
             for (let articl of scraped ){
                 if (articl.link){
                             const response = await axios.get(articl.link)
-                            const dateObj = await transformDate(articl.date)
-                            console.log(dateObj)
+                            const dateObj = await transformDate(articl.date) // makes the date a valid date
                             if(choosenDate <= dateObj){
                                 if (response.status == 200){
                                     console.log('scraping content...')
@@ -96,7 +126,7 @@ async function run(choosenDate) {
             }
             }
         }
-            await fs.writeFile('ElbiladData.json', JSON.stringify(scrapedData),(err)=>{
+            await fs.writeFile(`ElbiladData_${Datestr}_${choosenCategory}.json`, JSON.stringify(scrapedData),(err)=>{
             if (err) throw err
             console.log('File Saved!')
         })
@@ -108,4 +138,4 @@ async function run(choosenDate) {
         await browser.close();
     }
 }
-run(userDate);
+run(userDate, category[0]);

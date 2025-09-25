@@ -3,26 +3,45 @@ const cheerio = require('cheerio');
 const { error } = require('console');
 const fs = require('fs')
 
+
+
 const scrapedData = [];
-const userDate = new Date('2025-09-25')
-async function scrape(choosenDate) {
+
+const Datestr = "2025-09-23"
+const userDate = new Date(Datestr) // i made the date on 2 seperate variables so i can refrence the str in the json file when saving
+
+//let the user choose the news category
+const category = [
+    "algeria",
+    "national",
+    "sport",
+    "world",
+    "culture",
+    "society"
+]
+
+
+async function scrape(choosenDate, choosenCategory) {
     try {
+        console.log(`Scraping the ${choosenCategory} category, until ${Datestr}`)
         let keepGoing = true
         let i = 1
         while(keepGoing){
-            let page = `https://www.ennaharonline.com/algeria/page/${i}/`
+            let page = `https://www.ennaharonline.com/${choosenCategory}/page/${i}/`
             const response = await axios.get(page)
             if (response.status == 200){
                 console.log(`scraping : ${page}`)
-                const html = response.data
+                const html = response.data // cummon cheerio+axios scraping technique , doesnt need explaining
                 const $ = cheerio.load(html)
                 const totalNews = $('.card__meta')
                 let n = 0
+
                 for (const news of totalNews ){
                     const header = $(news).find('.bunh').text()
                     const date = $(news).find('.card__mfit').attr('datetime')
                     const link = $(news).find('.bunh').attr('href') // lets scrape this page too
-                    const pageContent = await axios.get(link)
+
+                    const pageContent = await axios.get(link) // scraping each articl link using the same technique of scraping the whole articles page
                     const $1 = cheerio.load(pageContent.data)
                     const author = ($1('.sgb1__amta').find('[href="#"]').text()).replace("\n\t\t\t\t\t\t\t\t\t\t\t", "")
                     const content = $1('.artx').find('p').text()
@@ -47,8 +66,9 @@ async function scrape(choosenDate) {
                         }
                     }
                 }
-                if(keepGoing) i++;
-            } else{
+                if(keepGoing) i++; //scrape next url
+            } 
+            else {
                 keepGoing = false
                 throw new Error("Coudln't load the Page , response.status != 200")
             }
@@ -57,9 +77,9 @@ async function scrape(choosenDate) {
     } catch (error) {
         console.error(error)
     }
-    fs.writeFile('EnnaharData.json', JSON.stringify(scrapedData),(err) =>{
+    fs.writeFile(`EnnaharData_${Datestr}_${choosenCategory}.json`, JSON.stringify(scrapedData),(err) =>{
         if (err) throw err;
         console.log('File saved')
     })
 }
-scrape(userDate);
+scrape(userDate, category[0]);
