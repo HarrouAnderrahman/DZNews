@@ -4,7 +4,7 @@ const axios = require('axios')
 const cheerio = require ('cheerio')
 
 // I need to make it so the user chooses a date and it will scrape until the date is due
-const userDate = new Date('2025-09-15')
+const userDate = new Date('2025-09-23')
 // first lemme just make a function that transform the articl date to a valid js date
 async function transformDate(str) {
     let [stopDay, stopMonth, stopYear] = str.split('-')
@@ -14,7 +14,9 @@ async function run(choosenDate) {
     let browser;
     let scrapedData = [];
     try {
-        browser = await puppeteer.launch({headless:false});
+        browser = await puppeteer.launch(
+            // {headless:false} // <-- for debugging
+        );
         console.log('Opening Browser ...')
         const page = await browser.newPage();
         // The reason i commented this is because it was hiding the button
@@ -65,24 +67,28 @@ async function run(choosenDate) {
             for (let articl of scraped ){
                 if (articl.link){
                             const response = await axios.get(articl.link)
-                            if (response.status == 200){
-                                console.log('scraping content...')
-                                const html = await response.data
-                                const $ = cheerio.load(html)
-                                const contentData = $('.cols-a').find('p').text().replace("{{ key }}: {{ error[0] }}\n        بريدك الالكتروني\n        \n        اشتراك\n    10922 V 27500 7/8Satellite : Nilesat 7.0 ° West", "")
-                                const author = $('.title').find('.strong')?.text() || 'no author'
-                                scrapedData.push({
-                                    'title': articl.title,
-                                    'link': articl.link,
-                                    'date': articl.date,
-                                    'content': {
-                                        'contentData':contentData,
-                                        'author':author
-                                    }
-                                })
-                            }
-                            else {
-                                throw new Error("Failed scraping the context")
+                            const dateObj = await transformDate(articl.date)
+                            console.log(dateObj)
+                            if(choosenDate <= dateObj){
+                                if (response.status == 200){
+                                    console.log('scraping content...')
+                                    const html = await response.data
+                                    const $ = cheerio.load(html)
+                                    const contentData = $('.cols-a').find('p').text().replace("{{ key }}: {{ error[0] }}\n        بريدك الالكتروني\n        \n        اشتراك\n    10922 V 27500 7/8Satellite : Nilesat 7.0 ° West", "")
+                                    const author = $('.title').find('.strong')?.text() || 'no author'
+                                    scrapedData.push({
+                                        'title': articl.title,
+                                        'link': articl.link,
+                                        'date': articl.date,
+                                        'content': {
+                                            'contentData':contentData,
+                                            'author':author
+                                        }
+                                    })
+                                }
+                                else {
+                                    throw new Error("Failed scraping the context")
+                                }
                             }
                 } else {
                     continue;
