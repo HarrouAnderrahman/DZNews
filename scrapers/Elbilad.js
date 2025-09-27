@@ -6,19 +6,19 @@ const cheerio = require ('cheerio')
 // I need to make it so the user chooses a date and it will scrape until the date is due
 
 
-const Datestr = "2025-09-18"
-const userDate = new Date(Datestr) // i made the date on 2 seperate variables so i can refrence the str in the json file when saving
+// const Datestr = "2025-09-18"
+// const userDate = new Date(Datestr) // i made the date on 2 seperate variables so i can refrence the str in the json file when saving
 
 
 //let the user choose the news category
-const category = [
-    "national",
-    "derniere-info",
-    "economique",
-    "sports",
-    "observateur",
-    "international"
-]
+const categories = {
+    national: "national",
+    algeria: "derniere-info",
+    economy: "economique",
+    sports: "sports",
+    observateur: "observateur",
+    international: "international"
+}
 
 
 // first lemme just make a function that transform the articl date to a valid js date
@@ -138,4 +138,4 @@ async function run(choosenDate, choosenCategory) {
         await browser.close();
     }
 }
-run(userDate, category[0]);
+module.exports = {run, categories} // <-- so i can manage it in scraperManager

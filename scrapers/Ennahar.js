@@ -11,17 +11,17 @@ const Datestr = "2025-09-23"
 const userDate = new Date(Datestr) // i made the date on 2 seperate variables so i can refrence the str in the json file when saving
 
 //let the user choose the news category
-const category = [
-    "algeria",
-    "national",
-    "sport",
-    "world",
-    "culture",
-    "society"
-]
+const categories ={ // mapped the categories so i can make better ux by making universal syntax for all categories
+    algeria: "algeria",
+    national: "national",
+    sports: "sport",
+    international: "world",
+    culture: "culture",
+    society: "society"
+}
 
 
-async function scrape(choosenDate, choosenCategory) {
+async function run(choosenDate, choosenCategory) {
     try {
         console.log(`Scraping the ${choosenCategory} category, until ${Datestr}`)
         let keepGoing = true
@@ -82,4 +82,4 @@ async function scrape(choosenDate, choosenCategory) {
         console.log('File saved')
     })
 }
-scrape(userDate, category[0]);
+module.exports = {run, categories} // <-- so i can manage it in scraperManager

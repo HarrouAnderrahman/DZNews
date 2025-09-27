@@ -10,15 +10,15 @@ const userDate = new Date(Datestr) // i made the date on 2 seperate variables so
 
 
 // why not let the user choose the news category
-const category = [
-    "الحدث",
-    "سياسة",
-    "اقتصاد",
-    "مجتمع",
-    "ثقافة-و-فن",
-    "رياضة",
-    "دولي"
-]
+const categories ={
+    national: "الحدث",
+    politics: "سياسة",
+    economics: "اقتصاد",
+    society: "مجتمع",
+    culture: "ثقافة-و-فن",
+    sports: "رياضة",
+    international: "دولي"
+}
 
 // first lemme just make a function that transform the articl date to a valid js date
 // i dont need to make this function for this site since it gives a valid date
@@ -136,4 +136,4 @@ async function run(choosenDate, choosenCategory) {
         await browser.close();
     }
 }
-run(userDate, category[4]);
+module.exports = {run, categories} // <-- so i can manage it in scraperManager
