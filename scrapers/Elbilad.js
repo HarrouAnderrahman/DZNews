@@ -1,14 +1,14 @@
-const fs = require('fs')
 const puppeteer = require('puppeteer')
 const axios = require('axios')
 const cheerio = require ('cheerio')
+const {transformDate} = require('./utils/dateHandling')
+const exportingData = require('./utils/saveHandling')
 
 // I need to make it so the user chooses a date and it will scrape until the date is due
 
 
-// const Datestr = "2025-09-18"
-// const userDate = new Date(Datestr) // i made the date on 2 seperate variables so i can refrence the str in the json file when saving
-
+const Datestr = "2025-09-26"
+const userDate = new Date(Datestr) // i made the date on 2 seperate variables so i can refrence the str in the json file when saving
 
 //let the user choose the news category
 const categories = {
@@ -20,14 +20,6 @@ const categories = {
     international: "international"
 }
 
-
-// first lemme just make a function that transform the articl date to a valid js date
-
-
-async function transformDate(str) {
-    let [stopDay, stopMonth, stopYear] = str.split('-')
-    return new Date(`${stopYear}-${stopMonth}-${stopDay}`)// need it so it transforms elbilad invalid date to a valid one
-}
 
 
 async function run(choosenDate, choosenCategory) {
@@ -74,7 +66,7 @@ async function run(choosenDate, choosenCategory) {
 
             let stopDate = await transformDate(extractLastDate);
 
-            if (choosenDate < stopDate){
+            if (choosenDate <= stopDate){
                 await page.waitForSelector("#categoryArticles > ul > li.link-btn")
                 await page.click("#categoryArticles > ul > li.link-btn")
                 console.log('clicked the load more button...')
@@ -126,10 +118,7 @@ async function run(choosenDate, choosenCategory) {
             }
             }
         }
-            await fs.writeFile(`ElbiladData_${Datestr}_${choosenCategory}.json`, JSON.stringify(scrapedData),(err)=>{
-            if (err) throw err
-            console.log('File Saved!')
-        })
+            await exportingData(`ElbiladData_${Datestr}_${choosenCategory}`, scrapedData)
     }
     catch (error){
         console.error(error)
@@ -138,4 +127,5 @@ async function run(choosenDate, choosenCategory) {
         await browser.close();
     }
 }
+run(userDate, categories.national);
 module.exports = {run, categories} // <-- so i can manage it in scraperManager

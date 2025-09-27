@@ -8,11 +8,13 @@ const scrapers = {
     elbilad:Elbiladscraper.run,
     algeriemaintenant:AlgerieMaintenantscraper.run
 }
+
 const categories = {
     ennahar:Ennaharscraper.categories,
     elbilad:Elbiladscraper.categories,
     algeriemaintenant:AlgerieMaintenantscraper.categories
 }
+
 async function scrape(source, date, category) { 
     try {
         const choosenSource = source.toLowerCase()

@@ -10,6 +10,7 @@ lerna-debug.log*
 ElbiladData*.json
 EnnaharData*.json
 AlgeriemaintenantData*.json
+scrapedData/
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json

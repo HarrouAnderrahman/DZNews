@@ -68,7 +68,7 @@ async function run(choosenDate, choosenCategory) {
 
             let stopDate = new Date(extractLastDate)
 
-            if (choosenDate < stopDate){
+            if (choosenDate <= stopDate){
                 await page.waitForSelector("#lda_request") // the button id
 
                 await page.click("#lda_request")

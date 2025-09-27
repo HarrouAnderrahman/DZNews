@@ -1,13 +1,12 @@
 const axios = require('axios'); 
 const cheerio = require('cheerio');
-const { error } = require('console');
-const fs = require('fs')
+const exportingData = require('./utils/saveHandling')
 
 
 
 const scrapedData = [];
 
-const Datestr = "2025-09-23"
+const Datestr = "2025-09-27" // <-- for debugging
 const userDate = new Date(Datestr) // i made the date on 2 seperate variables so i can refrence the str in the json file when saving
 
 //let the user choose the news category
@@ -77,9 +76,7 @@ async function run(choosenDate, choosenCategory) {
     } catch (error) {
         console.error(error)
     }
-    fs.writeFile(`EnnaharData_${Datestr}_${choosenCategory}.json`, JSON.stringify(scrapedData),(err) =>{
-        if (err) throw err;
-        console.log('File saved')
-    })
+    await exportingData(`EnnaharData_${Datestr}_${choosenCategory}`, scrapedData)
 }
+run(userDate ,categories.sports);
 module.exports = {run, categories} // <-- so i can manage it in scraperManager
