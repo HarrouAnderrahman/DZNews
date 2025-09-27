@@ -2,6 +2,7 @@ const fs = require('fs')
 const puppeteer = require('puppeteer')
 const axios = require('axios')
 const cheerio = require ('cheerio')
+const exportingData = require('./utils/saveHandling')
 
 // I need to make it so the user chooses a date and it will scrape until the date is due
 
@@ -29,7 +30,7 @@ async function run(choosenDate, choosenCategory) {
     let scrapedData = [];
     try {
         browser = await puppeteer.launch(
-            {headless:false} // <-- For debugging
+            // {headless:false} // <-- For debugging
         );
         console.log('Opening Browser ...')
 
@@ -59,12 +60,12 @@ async function run(choosenDate, choosenCategory) {
             let articlCount = await page.$$eval(
                 "body > div.arcv > div > div > div.arcv__main > div > div.arcv__ccar > article.art1",
                  articleNum => articleNum.length + 1) 
-            console.log(`Loaded articles : ${articlCount}`)
+            // console.log(`Loaded articles : ${articlCount}`) // <-- For debugging
             let extractLastDate = await page.$eval(
                 `body > div.arcv > div > div > div.arcv__main > div > div.arcv__ccar > article:nth-child(${articlCount}) > div > div.datl.d-f > time`,
                  date => date.dateTime) // the date is valid so it doesnt need any date manipulation
 
-            console.log(`Last loaded date : ${extractLastDate}`)
+            // console.log(`Last loaded date : ${extractLastDate}`) // <-- For debugging
 
             let stopDate = new Date(extractLastDate)
 
@@ -124,10 +125,7 @@ async function run(choosenDate, choosenCategory) {
             }
             }
         }
-            await fs.writeFile(`AlgeriemaintenantData_${Datestr}_${choosenCategory}.json`, JSON.stringify(scrapedData),(err)=>{
-            if (err) throw err
-            console.log('File Saved!')
-        })
+            await exportingData(`AlgeriemaintenantData_${Datestr}_${choosenCategory}`, scrapedData)
     }
     catch (error){
         console.error(error)
@@ -136,4 +134,5 @@ async function run(choosenDate, choosenCategory) {
         await browser.close();
     }
 }
+run(userDate, categories.national)
 module.exports = {run, categories} // <-- so i can manage it in scraperManager
