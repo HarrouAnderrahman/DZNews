@@ -3,11 +3,13 @@ const puppeteer = require('puppeteer')
 const axios = require('axios')
 const cheerio = require ('cheerio')
 const exportingData = require('./utils/saveHandling')
+const {dateToString} = require('./utils/dateHandling')
 
 // I need to make it so the user chooses a date and it will scrape until the date is due
 
-const Datestr = "2025-09-18"
-const userDate = new Date(Datestr) // i made the date on 2 seperate variables so i can refrence the str in the json file when saving
+// const dateStr = "2025-09-18" // <-- for debugging
+// const userDate = new Date(dateStr) 
+// i made the date on 2 seperate variables so i can refrence the str in the json file when saving
 
 
 // why not let the user choose the news category
@@ -25,7 +27,8 @@ const categories ={
 // i dont need to make this function for this site since it gives a valid date
 
 async function run(choosenDate, choosenCategory) {
-    console.log(`Scraping the ${choosenCategory} category, until ${Datestr}`)
+    const dateStr = await dateToString(choosendate)
+    console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`)
     let browser;
     let scrapedData = [];
     try {
@@ -125,7 +128,7 @@ async function run(choosenDate, choosenCategory) {
             }
             }
         }
-            await exportingData(`AlgeriemaintenantData_${Datestr}_${choosenCategory}`, scrapedData)
+            await exportingData(`AlgeriemaintenantData_${dateStr}_${choosenCategory}`, scrapedData)
     }
     catch (error){
         console.error(error)
@@ -134,5 +137,5 @@ async function run(choosenDate, choosenCategory) {
         await browser.close();
     }
 }
-run(userDate, categories.national)
+// run(userDate, categories.national) // <-- for debugging
 module.exports = {run, categories} // <-- so i can manage it in scraperManager

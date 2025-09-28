@@ -1,13 +1,14 @@
 const axios = require('axios'); 
 const cheerio = require('cheerio');
 const exportingData = require('./utils/saveHandling')
+const {dateToString} = require('./utils/dateHandling')
 
 
 
 const scrapedData = [];
 
-const Datestr = "2025-09-27" // <-- for debugging
-const userDate = new Date(Datestr) // i made the date on 2 seperate variables so i can refrence the str in the json file when saving
+// const Datestr = "2025-09-27" // <-- for debugging
+// const userDate = new Date(Datestr) 
 
 //let the user choose the news category
 const categories ={ // mapped the categories so i can make better ux by making universal syntax for all categories
@@ -22,7 +23,8 @@ const categories ={ // mapped the categories so i can make better ux by making u
 
 async function run(choosenDate, choosenCategory) {
     try {
-        console.log(`Scraping the ${choosenCategory} category, until ${Datestr}`)
+        const dateStr = await dateToString(choosenDate)
+        console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`)
         let keepGoing = true
         let i = 1
         while(keepGoing){
@@ -73,10 +75,10 @@ async function run(choosenDate, choosenCategory) {
             }
 
         }
+        await exportingData(`EnnaharData_${dateStr}_${choosenCategory}`, scrapedData)
     } catch (error) {
         console.error(error)
     }
-    await exportingData(`EnnaharData_${Datestr}_${choosenCategory}`, scrapedData)
 }
-run(userDate ,categories.sports);
+// run(userDate ,categories.sports); // <-- for debugging
 module.exports = {run, categories} // <-- so i can manage it in scraperManager

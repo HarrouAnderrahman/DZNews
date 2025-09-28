@@ -48,4 +48,4 @@ async function displayCategories(source) {
         console.error(error)
     }
 }
-module.exports = {scrape, displayCategories}
+module.exports = {categories ,scrape, displayCategories}
