@@ -1,7 +1,7 @@
 {
   "name": "dznews",
   "version": "0.1.0",
-  "description": "Algerian News Webscraper",
+  "description": "DZNews is a node CLI tool for scraping and collecting news articles from major Algerian news sources.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,12 +11,15 @@
     "type": "git",
     "url": "git+https://github.com/HarrouAnderrahman/DZNews.git"
   },
+  "bin": {
+  "dznews": "./index.js"
+  },
   "keywords": [
     "Algerian",
     "News"
   ],
   "author": "Harrou Abderrahman",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/HarrouAnderrahman/DZNews/issues"
   },

@@ -3,6 +3,7 @@
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 ![Node.js](https://img.shields.io/badge/node-%3E%3D16.0.0-green.svg)
 ![Platform: CLI](https://img.shields.io/badge/platform-CLI-blue.svg)
+[![npm version](https://img.shields.io/npm/v/dznews)](https://www.npmjs.com/package/dznews)
 
 **Algerian News Webscraper Command-Line Tool**
 
@@ -57,6 +58,13 @@ Clone this repository and install dependencies:
 git clone https://github.com/HarrouAnderrahman/DZNews.git
 cd DZNews
 npm install
+```
+
+Or if you want to use it globally :
+
+```sh
+npm install -g dznews
+dznews sources
 ```
 
 ---
