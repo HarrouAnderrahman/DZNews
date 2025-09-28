@@ -18,7 +18,6 @@
 
 - [ ] **Add More UX Options**
   - Provide options like custom output directory, filtering, and interactive prompts.
-  - Use commander.js or inquirer.js for flexible CLI options.
 
 ## Enhancements for Developers and Power Users (Medium Priority)
 
@@ -39,4 +38,3 @@
 - [ ] **Publish v1.0.0 (Stable Release)**
   - Complete all above tasks.
   - Test thoroughly and update documentation.
-  - Bump version in `package.json` and run `npm publish` for release.
