@@ -9,9 +9,10 @@ const program = new Command(); // <-- setting up commander
 program
   .name('DZNews-CLI')
   .description('Algerian News Webscraper')
-  .version('0.1.0')
-  .option('-l, --list', 'List available sources');
-  program // listing the sources
+  .version('0.1.0');
+
+
+program // listing the sources
   .command('sources')
   .description('List all available sources')
   .action(() => {
@@ -19,6 +20,8 @@ program
     console.log("Available sources :")
     sources.forEach(source => console.log('- ' + source))
   });
+
+
 program // listing the categories
   .command('cat <source>')
   .description('List categories of a specific source')
@@ -31,10 +34,14 @@ program // listing the categories
       )
     }
   });
+
+
 program // the scraping command
   .command('scrape <source> <date> <category>')
   .description('scrapes a specific source with a choosen source until a choosen date ')
   .action(async (source, date, category) =>{
     scrape(source, date, category)
   })
+
+
 program.parse(); // <-- Parsing the commands
