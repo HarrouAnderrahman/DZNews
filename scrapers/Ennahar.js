@@ -57,7 +57,7 @@ async function run(choosenDate, choosenCategory, saveOption) {
                                 'link':link,
                                 'content':{
                                     'author':author,
-                                    'content':content
+                                    'contentData':content
                                 }
                             })
                         }else{
