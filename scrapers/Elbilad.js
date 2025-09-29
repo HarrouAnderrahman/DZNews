@@ -94,7 +94,7 @@ async function run(choosenDate, choosenCategory, saveOption) {
                                     const html = await response.data
                                     const $ = cheerio.load(html)
                                     const contentData = $('.cols-a').find('p').text().replace("{{ key }}: {{ error[0] }}\n        بريدك الالكتروني\n        \n        اشتراك\n    10922 V 27500 7/8Satellite : Nilesat 7.0 ° West", "")
-                                    const author = $('.title').find('.strong')?.text() || 'no author'
+                                    const author = $('.title').find('.strong')?.text() || 'Unknown author'
                                     scrapedData.push({
                                         'title': articl.title,
                                         'link': articl.link,

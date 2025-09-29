@@ -5,15 +5,9 @@ const cheerio = require ('cheerio')
 const exportingData = require('./utils/saveHandling')
 const {dateToString} = require('./utils/dateHandling')
 
-// I need to make it so the user chooses a date and it will scrape until the date is due
-
-// const dateStr = "2025-09-18" // <-- for debugging
-// const userDate = new Date(dateStr) 
-// i made the date on 2 seperate variables so i can refrence the str in the json file when saving
 
 
-// why not let the user choose the news category
-const categories ={
+const categories ={ // easier and more efficient to list categories this way
     national: "الحدث",
     politics: "سياسة",
     economics: "اقتصاد",
@@ -23,11 +17,9 @@ const categories ={
     international: "دولي"
 }
 
-// first lemme just make a function that transform the articl date to a valid js date
-// i dont need to make this function for this site since it gives a valid date
 
-async function run(choosenDate, choosenCategory, saveOption) {
-    const dateStr = await dateToString(choosendate)
+async function run(choosenDate, choosenCategory, saveOption) { // same as Elbilad scraper with some changes
+    const dateStr = await dateToString(choosenDate)
     console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`)
     let browser;
     let scrapedData = [];
@@ -107,11 +99,12 @@ async function run(choosenDate, choosenCategory, saveOption) {
                                     const html = await response.data
                                     const $ = cheerio.load(html)
                                     const contentData = $('.article__txt').text().replace("\n\t\t\t\t\t\t\t\t", "")
-                                    const author = $('.article__author-name')?.text() || 'no author'
+                                    let author = $('.article__author-name').text().replace("بواسطة", "")
+                                    if (author.trim() == false) {author = "Unknown author"} // for more organized look
                                     scrapedData.push({
                                         'title': articl.title,
                                         'link': articl.link,
-                                        'date': dateObj,
+                                        'date': articl.date,
                                         'content': {
                                             'contentData':contentData,
                                             'author':author
@@ -137,5 +130,4 @@ async function run(choosenDate, choosenCategory, saveOption) {
         await browser.close();
     }
 }
-// run(userDate, categories.national) // <-- for debugging
 module.exports = {run, categories} // <-- so i can manage it in scraperManager
