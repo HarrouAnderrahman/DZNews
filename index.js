@@ -9,7 +9,7 @@ const program = new Command(); // <-- setting up commander
 program
   .name('DZNews-CLI')
   .description('Algerian News Webscraper')
-  .version('0.1.0');
+  .version('0.2.0');
 
 
 program // listing the sources
@@ -39,8 +39,9 @@ program // listing the categories
 program // the scraping command
   .command('scrape <source> <date> <category>')
   .description('scrapes a specific source with a choosen source until a choosen date ')
-  .action(async (source, date, category) =>{
-    scrape(source, date, category)
+  .option('-e, --export <option>', 'selection export option : csv, json')
+  .action(async (source, date, category, options) =>{
+    scrape(source, date, category, options.export)
   })
 
 

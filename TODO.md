@@ -12,9 +12,9 @@
   - Display scraping progress in real time for better UX.
   - Use [cli-progress](https://www.npmjs.com/package/cli-progress) or similar.
 
-- [ ] **Add CSV Export Option**
+- [x] **Add CSV Export Option**
   - Allow users to export scraped news to CSV files.
-  - Add a CLI flag (e.g., `--format csv`), use [csv-writer](https://www.npmjs.com/package/csv-writer).
+  - Add a CLI flag (e.g., `--format csv`), ~~use [csv-writer](https://www.npmjs.com/package/csv-writer).~~ <-- Decided to make my own csv convertor
 
 - [ ] **Add More UX Options**
   - Provide options like custom output directory, filtering, and interactive prompts.

@@ -18,7 +18,7 @@ const categories = {
 
 
 
-async function run(choosenDate, choosenCategory) {
+async function run(choosenDate, choosenCategory, saveOption) {
     const dateStr = await dateToString(choosenDate)
     console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`)
     let browser;
@@ -115,7 +115,7 @@ async function run(choosenDate, choosenCategory) {
             }
             }
         }
-            await exportingData(`ElbiladData_${dateStr}_${choosenCategory}`, scrapedData)
+            await exportingData(`ElbiladData_${dateStr}_${choosenCategory}`, scrapedData, saveOption)
     }
     catch (error){
         console.error(error)

@@ -26,7 +26,7 @@ const categories ={
 // first lemme just make a function that transform the articl date to a valid js date
 // i dont need to make this function for this site since it gives a valid date
 
-async function run(choosenDate, choosenCategory) {
+async function run(choosenDate, choosenCategory, saveOption) {
     const dateStr = await dateToString(choosendate)
     console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`)
     let browser;
@@ -128,7 +128,7 @@ async function run(choosenDate, choosenCategory) {
             }
             }
         }
-            await exportingData(`AlgeriemaintenantData_${dateStr}_${choosenCategory}`, scrapedData)
+            await exportingData(`AlgeriemaintenantData_${dateStr}_${choosenCategory}`, scrapedData, saveOption)
     }
     catch (error){
         console.error(error)

@@ -15,7 +15,7 @@ const categories = {
     algeriemaintenant:AlgerieMaintenantscraper.categories
 }
 
-async function scrape(source, date, category) { 
+async function scrape(source, date, category, saveOption) { 
     try {
         const choosenSource = source.toLowerCase()
         const choosenCategory = categories[choosenSource][category.toLowerCase()]
@@ -30,7 +30,7 @@ async function scrape(source, date, category) {
         if (!choosenCategory) {
             throw new Error (`Uknown category: ${category}`)
         }
-        return await scraper(dateObj, choosenCategory) // if you don't understand what's going on here , please check the code in ./scrapers
+        return await scraper(dateObj, choosenCategory, saveOption) // if you don't understand what's going on here , please check the code in ./scrapers
 
     } catch (error) {
         console.error(error)

@@ -21,7 +21,7 @@ const categories ={ // mapped the categories so i can make better ux by making u
 }
 
 
-async function run(choosenDate, choosenCategory) {
+async function run(choosenDate, choosenCategory, saveOption) {
     try {
         const dateStr = await dateToString(choosenDate)
         console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`)
@@ -75,7 +75,7 @@ async function run(choosenDate, choosenCategory) {
             }
 
         }
-        await exportingData(`EnnaharData_${dateStr}_${choosenCategory}`, scrapedData)
+        await exportingData(`EnnaharData_${dateStr}_${choosenCategory}`, scrapedData, saveOption)
     } catch (error) {
         console.error(error)
     }

@@ -7,7 +7,7 @@
 
 **Algerian News Webscraper Command-Line Tool**
 
-DZNews-CLI is a command-line tool for scraping Algerian news articles from multiple sources and categories. It lets you fetch, save, and organize news data for research, monitoring, or personal use—all via a simple CLI interface.
+DZNews-CLI is a command-line tool for scraping Algerian news articles from multiple sources and categories. It lets you fetch, save, and organize news data for research, monitoring, or personal use—now supporting both **JSON and CSV** exports.
 
 ---
 
@@ -27,7 +27,7 @@ DZNews-CLI is a command-line tool for scraping Algerian news articles from multi
 
 - **Scrape articles** from supported Algerian news sources by category and date.
 - **List available sources** and their categories.
-- **Save scraped data** to JSON files for easy analysis.
+- **Save scraped data** to **JSON** (default) or **CSV** files for easy analysis.
 - **Easy-to-use commands** powered by Commander.js.
 
 ---
@@ -52,20 +52,14 @@ DZNews-CLI is a command-line tool for scraping Algerian news articles from multi
 **Requirements:**  
 - Node.js v16.0.0 or higher
 
-Clone this repository and install dependencies:
+Install from npm (recommended for beta users: use locally in your project):
 
 ```sh
-git clone https://github.com/HarrouAnderrahman/DZNews.git
-cd DZNews
-npm install
+npm install dznews
 ```
 
-Or if you want to use it globally :
-
-```sh
-npm install -g dznews
-dznews sources
-```
+**Note:**  
+Global installation (`npm install -g dznews`) is not recommended while in beta.
 
 ---
 
@@ -73,24 +67,27 @@ dznews sources
 
 **List all available news sources:**
 ```sh
-node index.js sources
+npx dznews sources
 ```
 
 **List categories for a specific source:**
 ```sh
-node index.js cat <source>
+npx dznews cat <source>
 # Example:
-node index.js cat ennahar
+npx dznews cat ennahar
 ```
 
-**Scrape articles from a source:**
+**Scrape articles from a source (with export option):**
 ```sh
-node index.js scrape <source> <date> <category>
-# Example:
-node index.js scrape ennahar 2025-09-28 sports
+npx dznews scrape <source> <date> <category> [options]
+# Example (JSON, default):
+npx dznews scrape ennahar 2025-09-28 sports
+
+# Example (CSV export):
+npx dznews scrape ennahar 2025-09-28 sports --export csv
 ```
 - Date format: `YYYY-MM-DD`
-- Scraped data will be saved in the `scrapedData/` directory as a JSON file.
+- Scraped data will be saved in the `scrapedData/` directory as a JSON file by default, or as a CSV file if `--export csv` is used.
 
 ---
 
