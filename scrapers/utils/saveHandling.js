@@ -52,7 +52,7 @@ async function exportingData(fileName , scrapedData, option) { // the main scrap
         }
         
     } catch (error) {
-        console.error(chalk.bold.red(error))
+        console.error(chalk.bold.red(error) + "\n For more info please check the docs")
     }
     
 }
