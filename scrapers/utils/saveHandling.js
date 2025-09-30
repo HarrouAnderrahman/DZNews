@@ -42,30 +42,17 @@ async function exportingData(fileName , scrapedData, option) { // the main scrap
             });
             const csvFile = rows.join("\n")
 
-            fs.writeFile(fileData, csvFile,
-            (err)=>{
-                if (err) {
-                    throw err
-                }
-                else{
-                    console.log(`Data saved at : ${filePath}`)
-                }
-            })
+            fs.promises.writeFile(fileData, csvFile)
+            console.log(chalk.bold.green(`Data saved at : ${filePath}`))
         }
         else {
-            fs.writeFile(fileData, JSON.stringify(scrapedData),
-                (err)=>{
-                    if (err) {
-                        throw err
-                    }
-                    else{
-                        console.log(`Data saved at : ${filePath}`)
-                    }
-                })
+            fs.promises.writeFile(fileData, JSON.stringify(scrapedData));
+            console.log(chalk.bold.green(`Data saved at : ${filePath}`))
+                    
         }
         
     } catch (error) {
-        console.error(chalk.red(error))
+        console.error(chalk.bold.red(error))
     }
     
 }
