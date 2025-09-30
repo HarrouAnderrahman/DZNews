@@ -12,7 +12,7 @@
     "url": "git+https://github.com/HarrouAnderrahman/DZNews.git"
   },
   "bin": {
-  "dznews": "./index.js"
+    "dznews": "./index.js"
   },
   "keywords": [
     "Algerian",
@@ -26,6 +26,7 @@
   "homepage": "https://github.com/HarrouAnderrahman/DZNews#readme",
   "dependencies": {
     "axios": "^1.11.0",
+    "chalk": "^4.1.2",
     "cheerio": "^1.1.2",
     "commander": "^14.0.1",
     "puppeteer": "^24.22.0"

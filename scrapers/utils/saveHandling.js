@@ -1,5 +1,6 @@
 const fs = require ('fs')
 const path = require('path')
+const chalk = require('chalk')
 
 
 function csvEscape(content) { // for fixing issue : https://github.com/HarrouAnderrahman/DZNews/issues/2
@@ -64,7 +65,7 @@ async function exportingData(fileName , scrapedData, option) { // the main scrap
         }
         
     } catch (error) {
-        console.error(error)
+        console.error(chalk.red(error))
     }
     
 }

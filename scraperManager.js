@@ -2,6 +2,7 @@
 const Ennaharscraper = require('./scrapers/Ennahar')
 const Elbiladscraper = require('./scrapers/Elbilad')
 const AlgerieMaintenantscraper = require('./scrapers/AlgerieMaintenant')
+const chalk = require('chalk')
 
 const scrapers = {
     ennahar:Ennaharscraper.run,
@@ -18,22 +19,37 @@ const categories = {
 async function scrape(source, date, category, saveOption) { 
     try {
         const choosenSource = source.toLowerCase()
-        const choosenCategory = categories[choosenSource][category.toLowerCase()]
         const scraper = scrapers[choosenSource];
-        const dateObj = new Date(date)
         if (!scraper) {
-            throw new Error (`Uknown source: ${source}`)
+            throw new Error (
+                `Unknown source : ${source} ` + 
+                chalk.reset("\n Please run : ") +
+                chalk.inverse("dznews sources")
+            )
         }
+
+        const dateObj = new Date(date)
+
         if (isNaN(dateObj.getTime())) {
-            throw new Error (`Invalid date: ${date}`)
+            throw new Error (
+                `Invalid date: ${date}` +
+                chalk.reset("\n Dates should be formatted as : YYYY/MM/DD ")
+            )
         }
+
+        const choosenCategory = categories[choosenSource][category.toLowerCase()]
+
         if (!choosenCategory) {
-            throw new Error (`Uknown category: ${category}`)
+            throw new Error (
+                `Unknown category: ${category}` +
+                chalk.reset("\n Please run : ") +
+                chalk.inverse("dznews cat <source>")
+            )
         }
         return await scraper(dateObj, choosenCategory, saveOption) // if you don't understand what's going on here , please check the code in ./scrapers
 
     } catch (error) {
-        console.error(error)
+        console.error(chalk.bold.red(error) + "\n For more info please check the docs")
     }
 }
 async function displayCategories(source) {
@@ -41,11 +57,13 @@ async function displayCategories(source) {
         const choosenSource = source.toLowerCase()
         const availableCategories = categories[choosenSource]
         if(!availableCategories) {
-            throw new Error (`Uknown source : ${source}`)
+            throw new Error (`Unknown source : ${source} ` + 
+                chalk.reset("\n Please run : ") +
+                chalk.inverse("dznews sources"))
         }
         return Object.keys(availableCategories)
     } catch (error) {
-        console.error(error)
+        console.error(chalk.bold.red(error) + "\n For more info please check the docs")
     }
 }
 module.exports = {categories ,scrape, displayCategories}
