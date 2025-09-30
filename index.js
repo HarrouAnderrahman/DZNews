@@ -2,13 +2,14 @@
 
 const { Command } = require('commander')
 const {categories, scrape, displayCategories} = require('./scraperManager')
+const chalk = require('chalk')
 
 const program = new Command(); // <-- setting up commander
 
 // starting the cli
 program
-  .name('DZNews-CLI')
-  .description('Algerian News Webscraper')
+  .name(chalk.bold.bgCyan('DZNews-CLI'))
+  .description(chalk.bold('Algerian News Webscraper'))
   .version('0.3.0');
 
 
@@ -18,7 +19,7 @@ program // listing the sources
   .action(() => {
     const sources = Object.keys(categories)
     console.log("Available sources :")
-    sources.forEach(source => console.log('- ' + source))
+    sources.forEach(source => console.log('- ' + chalk.inverse(source)))
   });
 
 
