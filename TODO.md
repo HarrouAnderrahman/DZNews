@@ -4,7 +4,7 @@
 
 ## Must-Have Improvements (High Priority)
 
-- [ ] **Improve CLI Appearance (chalk.js)**
+- [x] **Improve CLI Appearance (chalk.js)**
   - Make output readable and appealing with colors/styles using [chalk.js](https://www.npmjs.com/package/chalk).
   - Refactor output for errors, warnings, headings, and success messages.
 
