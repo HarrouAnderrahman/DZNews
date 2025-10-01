@@ -30,7 +30,7 @@ async function scrape(source, date, category, saveOption) {
 
         const dateObj = new Date(date)
 
-        if (isNaN(dateObj.getTime())) {
+        if (isNaN(dateObj.getTime()) || date.length !== 10) {
             throw new Error (
                 `Invalid date: ${date}` +
                 chalk.reset("\n Dates should be formatted as : YYYY/MM/DD ")
