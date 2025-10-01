@@ -11,16 +11,17 @@ const program = new Command(); // <-- setting up commander
 program
   .name(chalk.bold.bgCyan('DZNews-CLI'))
   .description(chalk.bold('Algerian News Webscraper'))
-  .version('0.3.1');
+  .version('0.4.1');
 
 
 program // listing the sources
   .command('sources')
   .description('List all available sources')
+  .alias('s')
   .action(() => {
     const sources = Object.keys(categories)
-    console.log("Available sources :")
-    sources.forEach(source => console.log('- ' + chalk.inverse(source)))
+    console.log(chalk.bold.inverse("Available sources : "))
+    sources.forEach(source => console.log('- ' + source))
   });
 
 
@@ -30,7 +31,7 @@ program // listing the categories
   .action(async (source) =>{
     const categories = await displayCategories(source);
     if (categories && categories.length > 0){
-      console.log(`Available categories for ${source} :`)
+      console.log(chalk.bold.inverse(`Available categories for ${source} : `))
       categories.forEach(cat => 
         console.log('- ' + cat ) // so it organizes it
       )
@@ -49,8 +50,9 @@ program // the scraping command
 program // the Interactive mode
   .command('interactive')
   .description('A very simple Interactive interface for beginners')
+  .alias('i')
   .action(() =>{
-    console.log(chalk.bold.bgCyan("DZNews interactive CLI"))
+    console.log(chalk.bold.inverse("DZNews interactive CLI"))
     interactiveCLI();
   });
 
