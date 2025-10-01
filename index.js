@@ -48,7 +48,7 @@ program // the scraping command
 
 program // the Interactive mode
   .command('interactive')
-  .description('A very simple Interactive interface for bigginers')
+  .description('A very simple Interactive interface for beginners')
   .action(() =>{
     console.log(chalk.bold.bgCyan("DZNews interactive CLI"))
     interactiveCLI();
