@@ -8,15 +8,13 @@
   - Make output readable and appealing with colors/styles using [chalk.js](https://www.npmjs.com/package/chalk).
   - Refactor output for errors, warnings, headings, and success messages.
 
-- [ ] **Add Progress Bar**
-  - Display scraping progress in real time for better UX.
-  - Use [cli-progress](https://www.npmjs.com/package/cli-progress) or similar.
+- [x] ~~**Add Progress Bar**~~  <-- Stupid idea
 
 - [x] **Add CSV Export Option**
   - Allow users to export scraped news to CSV files.
   - Add a CLI flag (e.g., `--format csv`), ~~use [csv-writer](https://www.npmjs.com/package/csv-writer).~~ <-- Decided to make my own csv convertor
 
-- [ ] **Add More UX Options**
+- [x] **Add More UX Options**
   - Provide options like custom output directory, filtering, and interactive prompts.
 
 ## Enhancements for Developers and Power Users (Medium Priority)
@@ -31,7 +29,6 @@
 
 - [ ] **Improve Performance**
   - Optimize scraping logic for speed and resource efficiency.
-  - Profile code, add concurrency (e.g., `Promise.all`), reduce unnecessary waits.
 
 ## Final Milestone
 

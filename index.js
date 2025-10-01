@@ -2,6 +2,7 @@
 
 const { Command } = require('commander')
 const {categories, scrape, displayCategories} = require('./scraperManager')
+const interactiveCLI = require('./interactiveScraper')
 const chalk = require('chalk')
 
 const program = new Command(); // <-- setting up commander
@@ -43,7 +44,15 @@ program // the scraping command
   .option('-e, --export <option>', 'selection export option : csv, json')
   .action(async (source, date, category, options) =>{
     scrape(source, date, category, options.export)
-  })
+  });
+
+program // the Interactive mode
+  .command('interactive')
+  .description('A very simple Interactive interface for bigginers')
+  .action(() =>{
+    console.log(chalk.bold.bgCyan("DZNews interactive CLI"))
+    interactiveCLI();
+  });
 
 
 program.parse(); // <-- Parsing the commands
