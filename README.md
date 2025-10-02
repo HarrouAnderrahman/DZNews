@@ -7,7 +7,7 @@
 
 **Algerian News Webscraper Command-Line Tool**
 
-DZNews-CLI is a command-line tool for scraping Algerian news articles from multiple sources and categories. It lets you fetch, save, and organize news data for research, monitoring, or personal use—now supporting both **JSON and CSV** exports.
+DZNews-CLI is a command-line tool for scraping Algerian news articles from multiple sources and categories. Fetch, save, and organize news data for research, monitoring, or personal use all from your terminal.
 
 ---
 
@@ -26,16 +26,28 @@ DZNews-CLI is a command-line tool for scraping Algerian news articles from multi
 ## Features
 
 - **Scrape articles** from supported Algerian news sources by category and date.
+- **Interactive CLI mode** for beginners—guided, user-friendly prompts.
+- **Alias support** for faster command access (e.g., `dznews i` for interactive mode).
 - **List available sources** and their categories.
-- **Save scraped data** to **JSON** (default) or **CSV** files for easy analysis.
-- **Easy-to-use commands** powered by Commander.js.
+- **Custom output options**: save as **JSON** (default) or **CSV** files.
+- **CSV export** with a custom converter (no third-party CSV lib needed).
+- **Enhanced UX**: colored output, clear error messages, and strict date validation.
+- **Future-proof:** modular code for easy expansion and library usage.
 
 ---
 
 ## Demo
 
-> Example:
-> ![DZNews-CLI demo](./assets/demo.gif)
+### CLI Commands Overview
+![DZNews-CLI commands demo](./assets/Commands%20demo.gif)
+
+### Interactive Mode
+Beginner-friendly guided scraping:
+![DZNews-CLI interactive mode demo](./assets/Interactive%20CLI%20demo.gif)
+
+### CSV Export Example
+See how scraped data looks in CSV format:
+![DZNews-CLI CSV screenshot](./assets/CSV%20Screenshot.png)
 
 ---
 
@@ -65,19 +77,19 @@ Global installation (`npm install -g dznews`) is not recommended while in beta.
 
 ## Usage
 
-**List all available news sources:**
+### List all available news sources
 ```sh
 npx dznews sources
 ```
 
-**List categories for a specific source:**
+### List categories for a specific source
 ```sh
 npx dznews cat <source>
 # Example:
 npx dznews cat ennahar
 ```
 
-**Scrape articles from a source (with export option):**
+### Scrape articles from a source (with export option)
 ```sh
 npx dznews scrape <source> <date> <category> [options]
 # Example (JSON, default):
@@ -88,6 +100,14 @@ npx dznews scrape ennahar 2025-09-28 sports --export csv
 ```
 - Date format: `YYYY-MM-DD`
 - Scraped data will be saved in the `scrapedData/` directory as a JSON file by default, or as a CSV file if `--export csv` is used.
+
+### Use the Interactive Mode
+```sh
+npx dznews interactive
+# or
+npx dznews i
+```
+You’ll be guided through source, category, date, and export format selection.
 
 ---
 
