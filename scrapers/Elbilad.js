@@ -4,9 +4,14 @@ const cheerio = require ('cheerio')
 const {transformDate, dateToString} = require('./utils/dateHandling')
 const exportingData = require('./utils/saveHandling')
 
-// I need to make it so the user chooses a date and it will scrape until the date is due
 
-//let the user choose the news category
+const axiosHeader = { // to make it not look like a bot :]
+    header:{
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8'
+    }
+}
+
 const categories = {
     national: "national",
     algeria: "derniere-info",
@@ -86,7 +91,7 @@ async function run(choosenDate, choosenCategory, saveOption) {
             ))
             for (let articl of scraped ){
                 if (articl.link){
-                            const response = await axios.get(articl.link)
+                            const response = await axios.get(articl.link, axiosHeader)
                             const dateObj = await transformDate(articl.date) // makes the date a valid date
                             if(choosenDate <= dateObj){
                                 if (response.status == 200){

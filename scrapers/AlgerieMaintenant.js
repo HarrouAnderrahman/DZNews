@@ -6,6 +6,13 @@ const exportingData = require('./utils/saveHandling')
 const {dateToString} = require('./utils/dateHandling')
 
 
+const axiosHeader = { // to make it not look like a bot :]
+    header:{
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8'
+    }
+}
+
 
 const categories ={ // easier and more efficient to list categories this way
     national: "الحدث",
@@ -90,7 +97,7 @@ async function run(choosenDate, choosenCategory, saveOption) { // same as Elbila
             ))
             for (let articl of scraped ){
                 if (articl.link){ 
-                            const response = await axios.get(articl.link)
+                            const response = await axios.get(articl.link, axiosHeader)
                             const dateObj = new Date(articl.date) // so i can compare it
                             // The issue: the scraper is scraping every link including the ones that passed the choosenDate and i need to fix that
                             if (choosenDate < dateObj){

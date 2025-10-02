@@ -7,10 +7,8 @@ const {dateToString} = require('./utils/dateHandling')
 
 const scrapedData = [];
 
-// const Datestr = "2025-09-27" // <-- for debugging
-// const userDate = new Date(Datestr) 
 
-//let the user choose the news category
+
 const categories ={ // mapped the categories so i can make better ux by making universal syntax for all categories
     algeria: "algeria",
     national: "national",
@@ -18,6 +16,13 @@ const categories ={ // mapped the categories so i can make better ux by making u
     international: "world",
     culture: "culture",
     society: "society"
+}
+
+const axiosHeader = { // to make it not look like a bot :]
+    header:{
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8'
+    }
 }
 
 
@@ -29,7 +34,7 @@ async function run(choosenDate, choosenCategory, saveOption) {
         let i = 1
         while(keepGoing){
             let page = `https://www.ennaharonline.com/${choosenCategory}/page/${i}/`
-            const response = await axios.get(page)
+            const response = await axios.get(page, axiosHeader)
             if (response.status == 200){
                 console.log(`scraping : ${page}`)
                 const html = response.data // cummon cheerio+axios scraping technique , doesnt need explaining
@@ -42,7 +47,7 @@ async function run(choosenDate, choosenCategory, saveOption) {
                     const date = $(news).find('.card__mfit').attr('datetime')
                     const link = $(news).find('.bunh').attr('href') // lets scrape this page too
 
-                    const pageContent = await axios.get(link) // scraping each articl link using the same technique of scraping the whole articles page
+                    const pageContent = await axios.get(link, axiosHeader) // scraping each articl link using the same technique of scraping the whole articles page
                     const $1 = cheerio.load(pageContent.data)
                     const author = ($1('.sgb1__amta').find('[href="#"]').text()).replace("\n\t\t\t\t\t\t\t\t\t\t\t", "")
                     const content = $1('.artx').find('p').text()
@@ -80,5 +85,4 @@ async function run(choosenDate, choosenCategory, saveOption) {
         console.error(error)
     }
 }
-// run(userDate ,categories.sports); // <-- for debugging
 module.exports = {run, categories} // <-- so i can manage it in scraperManager

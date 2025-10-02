@@ -18,16 +18,11 @@
   - Provide options like custom output directory, filtering, and interactive prompts.
 
 ## Enhancements for Developers and Power Users (Medium Priority)
+- [x] **Add Anti-Bot Detection Handling**
+  - Setting up a good Axios header
+  - ~~Optionally integrate stealth plugins~~ <-- not needed since the using of puppeteer is minimal
 
-- [ ] **Make DZNews Usable as a Library**
-  - Refactor to expose main functions via `module.exports` so developers can import and use them.
-  - Add code examples to documentation.
-
-- [ ] **Add Anti-Bot Detection Handling**
-  - Detect and handle anti-bot measures (e.g., CAPTCHAs).
-  - Optionally integrate stealth plugins (e.g., [puppeteer-extra-plugin-stealth](https://www.npmjs.com/package/puppeteer-extra-plugin-stealth)).
-
-- [ ] **Improve Performance**
+- [x] **Improve Performance**
   - Optimize scraping logic for speed and resource efficiency.
 
 ## Final Milestone
