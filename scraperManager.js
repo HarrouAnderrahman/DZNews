@@ -2,18 +2,21 @@
 const Ennaharscraper = require('./scrapers/Ennahar')
 const Elbiladscraper = require('./scrapers/Elbilad')
 const AlgerieMaintenantscraper = require('./scrapers/AlgerieMaintenant')
+const Echouroukscraper = require("./scrapers/echoroukonline")
 const chalk = require('chalk')
 
 const scrapers = {
     ennahar:Ennaharscraper.run,
     elbilad:Elbiladscraper.run,
-    algeriemaintenant:AlgerieMaintenantscraper.run
+    algeriemaintenant:AlgerieMaintenantscraper.run,
+    echourouk:Echouroukscraper.run
 }
 
 const categories = {
     ennahar:Ennaharscraper.categories,
     elbilad:Elbiladscraper.categories,
-    algeriemaintenant:AlgerieMaintenantscraper.categories
+    algeriemaintenant:AlgerieMaintenantscraper.categories,
+    echourouk:Echouroukscraper.categories
 }
 
 async function scrape(source, date, category, saveOption) { 

@@ -11,7 +11,7 @@ const program = new Command(); // <-- setting up commander
 program
   .name(chalk.bold.bgCyan('DZNews-CLI'))
   .description(chalk.bold('Algerian News Webscraper'))
-  .version('0.4.1');
+  .version('0.5.1');
 
 
 program // listing the sources
