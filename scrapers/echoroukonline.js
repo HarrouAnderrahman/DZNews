@@ -11,11 +11,9 @@ const scrapedData = [];
 
 const categories ={ // mapped the categories so i can make better ux by making universal syntax for all categories
     algeria: "algeria",
-    national: "national",
+    economics: "economy",
     sports: "sport",
     international: "world",
-    culture: "culture",
-    society: "society"
 }
 
 const axiosHeader = { // to make it not look like a bot :]
@@ -33,25 +31,25 @@ async function run(choosenDate, choosenCategory, saveOption) {
         let keepGoing = true
         let i = 1
         while(keepGoing){
-            let page = `https://www.ennaharonline.com/${choosenCategory}/page/${i}/`
+            let page = `https://www.echoroukonline.com/${choosenCategory}/page/${i}/`
             const response = await axios.get(page, axiosHeader)
             if (response.status == 200){
                 console.log(`scraping : ${page}`)
                 const html = response.data // cummon cheerio+axios scraping technique , doesnt need explaining
                 const $ = cheerio.load(html)
-                const totalNews = $('.card__meta')
+                const totalNews = $('.ech-card__meta.fx-1._border._row._x-middle')
                 let n = 0
 
                 for (const news of totalNews ){
-                    const header = $(news).find('.bunh').text()
-                    const date = $(news).find('.card__mfit').attr('datetime')
-                    const link = $(news).find('.bunh').attr('href') // lets scrape this page too
+                    const header = $(news).find('h3').text().replace(/\s+/g, ' ')
+                    const date = $(news).find('.ech-card__mtil').text()
+                    const link = $(news).find('h3 > a').attr('href') // lets scrape this page too
 
                     const pageContent = await axios.get(link, axiosHeader) // scraping each articl link using the same technique of scraping the whole articles page
                     const $1 = cheerio.load(pageContent.data)
-                    const author = ($1('.sgb1__amta').find('[href="#"]').text()).replace("\n\t\t\t\t\t\t\t\t\t\t\t", "")
-                    const content = $1('.artx').find('p').text()
-                    if(date){ // to diffrentiate from side cards
+                    const author = $1(".d-f.fxd-c.ai-fs").find('a.ech-sgmn__aanm._link').text()
+                    const content = $1('.ech-artx').find('p').text()
+                    if(date){
                         dateObj = new Date (date)
                         if(choosenDate <= dateObj){
                             n += 1;
@@ -80,9 +78,11 @@ async function run(choosenDate, choosenCategory, saveOption) {
             }
 
         }
-        await exportingData(`EnnaharData_${dateStr}_${choosenCategory}`, scrapedData, saveOption)
+        await exportingData(`EchouroukData_${dateStr}_${choosenCategory}`, scrapedData, saveOption)
     } catch (error) {
         console.error(error)
     }
 }
+const chdate = new Date("2025/09/28")
+run(chdate, "algeria", "csv");
 module.exports = {run, categories} // <-- so i can manage it in scraperManager
