@@ -32,6 +32,7 @@ async function scrape(source, date, category, saveOption) {
         }
 
         const dateObj = new Date(date)
+        dateObj.setHours(0,0,0,0);
 
         if (isNaN(dateObj.getTime()) || date.length !== 10) {
             throw new Error (

@@ -52,7 +52,7 @@ async function run(choosenDate, choosenCategory, saveOption) {
                     const author = ($1('.sgb1__amta').find('[href="#"]').text()).replace("\n\t\t\t\t\t\t\t\t\t\t\t", "")
                     const content = $1('.artx').find('p').text()
                     if(date){ // to diffrentiate from side cards
-                        dateObj = new Date (date)
+                        let dateObj = new Date (date)
                         if(choosenDate <= dateObj){
                             n += 1;
                             console.log(`Scraping article ${n}...`)

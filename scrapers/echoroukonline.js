@@ -27,6 +27,7 @@ const axiosHeader = { // to make it not look like a bot :]
 async function run(choosenDate, choosenCategory, saveOption) {
     try {
         const dateStr = await dateToString(choosenDate)
+        // console.log(`choosendate : ${choosenDate} , ${typeof choosenDate}`) <-- debugging
         console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`)
         let keepGoing = true
         let i = 1
@@ -47,10 +48,14 @@ async function run(choosenDate, choosenCategory, saveOption) {
 
                     const pageContent = await axios.get(link, axiosHeader) // scraping each articl link using the same technique of scraping the whole articles page
                     const $1 = cheerio.load(pageContent.data)
-                    const author = $1(".d-f.fxd-c.ai-fs").find('a.ech-sgmn__aanm._link').text()
+                    let author = $1(".d-f.fxd-c.ai-fs").find('a.ech-sgmn__aanm._link').text()
+                    if(!author) {author = $1(".d-f.fxd-c.ai-fs").find('.ech-sgmn__aanm._noap').text()} // for sports category
                     const content = $1('.ech-artx').find('p').text()
+                    // console.log(`card date : ${date}`) <-- debugging
                     if(date){
-                        dateObj = new Date (date)
+                        let dateObj = new Date (date)
+                        // console.log(`dateOBJ : ${dateObj}`) <-- debugging
+                        // console.log(`choosenDate : ${choosenDate}`) <-- debugging
                         if(choosenDate <= dateObj){
                             n += 1;
                             console.log(`Scraping article ${n}...`)
