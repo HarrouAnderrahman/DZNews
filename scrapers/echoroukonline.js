@@ -38,7 +38,7 @@ async function run(choosenDate, choosenCategory, saveOption) {
                 console.log(`scraping : ${page}`)
                 const html = response.data // cummon cheerio+axios scraping technique , doesnt need explaining
                 const $ = cheerio.load(html)
-                const totalNews = $('.ech-card__meta.fx-1._border._row._x-middle')
+                const totalNews = $('body > section > div > div.ech-camp__cntn.d-f > div.ech-camp__main.fx-1 > div > article > div, .ech-card__meta.fx-1._border._row._x-middle')
                 let n = 0
 
                 for (const news of totalNews ){
@@ -54,8 +54,8 @@ async function run(choosenDate, choosenCategory, saveOption) {
                     // console.log(`card date : ${date}`) <-- debugging
                     if(date){
                         let dateObj = new Date (date)
-                        // console.log(`dateOBJ : ${dateObj}`) <-- debugging
-                        // console.log(`choosenDate : ${choosenDate}`) <-- debugging
+                        // console.log(`dateOBJ : ${dateObj}`) //<-- debugging
+                        // console.log(`choosenDate : ${choosenDate}`) //<-- debugging
                         if(choosenDate <= dateObj){
                             n += 1;
                             console.log(`Scraping article ${n}...`)
