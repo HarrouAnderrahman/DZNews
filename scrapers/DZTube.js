@@ -40,7 +40,7 @@ async function run(choosenDate, choosenCategory, saveOption) {
                 let n = 0
 
                 for (const news of totalNews ){
-                    const header = $(news).find('h2').text()
+                    const header = $(news).find('h2').text().trim()
                     const date = $(news).find('.article-date').attr('datetime')
                     const link = $(news).find('h2 > a').attr('href') // lets scrape this page too
 
@@ -82,6 +82,4 @@ async function run(choosenDate, choosenCategory, saveOption) {
         console.error(error)
     }
 }
-const date = new Date ("10-08-2025")
-run(date, "national", "csv")
 module.exports = {run, categories} // <-- so i can manage it in scraperManager
