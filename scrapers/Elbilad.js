@@ -76,7 +76,7 @@ async function run(choosenDate, choosenCategory, saveOption) {
                     prevCount => {
                         return document.querySelectorAll("#categoryArticles > ul > li").length - 1 > prevCount
                     },
-                    {timeout: 10000}, // no options
+                    {timeout: 10000},
                     articlCount // <<--- this is passed as prevCount
                 )
             } else {
