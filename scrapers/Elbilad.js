@@ -79,45 +79,62 @@ async function run(choosenDate, choosenCategory, saveOption) {
                     {timeout: 10000},
                     articlCount // <<--- this is passed as prevCount
                 )
-            } else {
+            } 
+            else {
                 keepGoing = false
-                let scraped = await page.$$eval('#categoryArticles > ul > li', news => news.map(
+                // My dumb ahh forgot to make it scrape the main (big card) too
+                let mainArticl = await page.$eval('#content > header > ul > li > h1 > a', (mainArticl)=>{
+                    const title = mainArticl.textContent.trim();
+                    const link = mainArticl.href;
+                    const date = ''
+                    return ({title, link, date})
+                })
+
+                // normal Cards :
+
+                let articles = await page.$$eval('#categoryArticles > ul > li', news => news.map(
                 (articl) =>{ 
                     const title = articl.querySelector('h3')?.textContent.trim() || ''
                     const link = articl.querySelector('h3 > a')?.href || ''
                     const date = articl.querySelector('ul > li:nth-child(3)')?.textContent.trim() || ''
                     return ({title,link,date})
                 }
-            ))
-            for (let articl of scraped ){
-                if (articl.link){
-                            const response = await axios.get(articl.link, axiosHeader)
-                            const dateObj = await transformDate(articl.date) // makes the date a valid date
-                            if(choosenDate <= dateObj){
-                                if (response.status == 200){
-                                    console.log('scraping content...')
-                                    const html = await response.data
-                                    const $ = cheerio.load(html)
-                                    const contentData = $('.cols-a').find('p').text().replace("{{ key }}: {{ error[0] }}\n        بريدك الالكتروني\n        \n        اشتراك\n    10922 V 27500 7/8Satellite : Nilesat 7.0 ° West", "")
-                                    const author = $('.title').find('.strong')?.text() || 'Unknown author'
-                                    scrapedData.push({
-                                        'title': articl.title,
-                                        'link': articl.link,
-                                        'date': articl.date,
-                                        'content': {
-                                            'contentData':contentData,
-                                            'author':author
-                                        }
-                                    })
+                ))
+                articles.unshift(mainArticl)
+                for (let articl of articles ){
+                    if (articl.link){
+                                const response = await axios.get(articl.link, axiosHeader)
+                                if (!articl.date) {
+                                    const mainHtml = await response.data
+                                    const main$ = cheerio.load(mainHtml)
+                                    articl.date = main$('#content > header > ul.list-share > li.title > a > span:nth-child(2)').text().trim().slice(0, 10)
                                 }
-                                else {
-                                    throw new Error("Failed scraping the context")
+                                const dateObj = await transformDate(articl.date) // makes the date a valid date
+                                if(choosenDate <= dateObj){
+                                    if (response.status == 200){
+                                        console.log('scraping content...')
+                                        const html = await response.data
+                                        const $ = cheerio.load(html)
+                                        const contentData = $('.cols-a').find('p').text().replace("{{ key }}: {{ error[0] }}\n        بريدك الالكتروني\n        \n        اشتراك\n    10922 V 27500 7/8Satellite : Nilesat 7.0 ° West", "")
+                                        const author = $('.title').find('.strong')?.text() || 'Unknown author'
+                                        scrapedData.push({
+                                            'title': articl.title,
+                                            'link': articl.link,
+                                            'date': articl.date,
+                                            'content': {
+                                                'contentData':contentData,
+                                                'author':author
+                                            }
+                                        })
+                                    }
+                                    else {
+                                        throw new Error("Failed scraping the context")
+                                    }
                                 }
-                            }
-                } else {
-                    continue;
+                    } else {
+                        continue;
+                    }
                 }
-            }
             }
         }
             await exportingData(`ElbiladData_${dateStr}_${choosenCategory}`, scrapedData, saveOption)

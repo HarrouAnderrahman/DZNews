@@ -5,8 +5,6 @@ const {dateToString} = require('./utils/dateHandling')
 
 
 
-const scrapedData = [];
-
 
 
 const categories ={ // mapped the categories so i can make better ux by making universal syntax for all categories
@@ -28,6 +26,7 @@ const axiosHeader = { // to make it not look like a bot :]
 
 async function run(choosenDate, choosenCategory, saveOption) {
     try {
+        const scrapedData = [];
         const dateStr = await dateToString(choosenDate)
         console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`)
         let keepGoing = true

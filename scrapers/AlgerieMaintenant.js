@@ -26,11 +26,11 @@ const categories ={ // easier and more efficient to list categories this way
 
 
 async function run(choosenDate, choosenCategory, saveOption) { // same as Elbilad scraper with some changes
-    const dateStr = await dateToString(choosenDate)
-    console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`)
-    let browser;
-    let scrapedData = [];
     try {
+        let scrapedData = [];
+        let browser;
+        const dateStr = await dateToString(choosenDate)
+        console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`)
         browser = await puppeteer.launch(
             // {headless:false} // <-- For debugging
         );

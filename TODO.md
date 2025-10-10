@@ -27,6 +27,6 @@
 
 ## Final Milestone
 
-- [ ] **Publish v1.0.0 (Stable Release)**
+- [x] **Publish v1.0.0 (Stable Release)**
   - Complete all above tasks.
   - Test thoroughly and update documentation.
