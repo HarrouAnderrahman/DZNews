@@ -2,8 +2,7 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const exportingData = require('./utils/saveHandling')
 const {dateToString} = require('./utils/dateHandling')
-
-
+const axiosHeader = require('./utils/axiosHeader')
 
 
 
@@ -14,13 +13,6 @@ const categories ={ // mapped the categories so i can make better ux by making u
     international: "world",
     culture: "culture",
     society: "society"
-}
-
-const axiosHeader = { // to make it not look like a bot :]
-    headers:{
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8'
-    }
 }
 
 
