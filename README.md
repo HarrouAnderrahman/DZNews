@@ -58,6 +58,7 @@ See how scraped data looks in CSV format:
 - [Algerie Maintenant](https://algeriemaintenant.dz/)
 - [Echourouk Online](https://www.echoroukonline.com/)
 - [Dzair-Tube](https://www.dzair-tube.dz/)
+- [Elkhabar](https://www.elkhabar.com/)
 
 ---
 
