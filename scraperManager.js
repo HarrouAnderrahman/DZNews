@@ -4,6 +4,7 @@ const Elbiladscraper = require('./scrapers/Elbilad')
 const AlgerieMaintenantscraper = require('./scrapers/AlgerieMaintenant')
 const Echouroukscraper = require("./scrapers/echoroukonline")
 const DZTube = require("./scrapers/DZTube")
+const Elkhabar = require("./scrapers/Elkhabar")
 const chalk = require('chalk')
 
 const scrapers = {
@@ -11,7 +12,8 @@ const scrapers = {
     elbilad:Elbiladscraper.run,
     algeriemaintenant:AlgerieMaintenantscraper.run,
     echourouk:Echouroukscraper.run,
-    dztube:DZTube.run
+    dztube:DZTube.run,
+    elkhabar:Elkhabar.run
 }
 
 const categories = {
@@ -19,7 +21,8 @@ const categories = {
     elbilad:Elbiladscraper.categories,
     algeriemaintenant:AlgerieMaintenantscraper.categories,
     echourouk:Echouroukscraper.categories,
-    dztube:DZTube.categories
+    dztube:DZTube.categories,
+    elkhabar:Elkhabar.categories
 }
 
 async function scrape(source, date, category, saveOption) { 
