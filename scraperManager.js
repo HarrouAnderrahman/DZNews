@@ -38,6 +38,7 @@ async function scrape(source, date, category, saveOption) {
         }
 
         const dateObj = new Date(date)
+        const now = new Date
         dateObj.setHours(0,0,0,0);
 
         if (isNaN(dateObj.getTime()) || date.length !== 10) {
@@ -46,6 +47,12 @@ async function scrape(source, date, category, saveOption) {
                 chalk.reset("\n Dates should be formatted as : YYYY/MM/DD ")
             )
         }
+
+        if (dateObj > now) throw new Error (
+                `Invalid date: ${date}` +
+                chalk.reset("\n Choosen Date must be before the current date ")
+            )
+
 
         const choosenCategory = categories[choosenSource][category.toLowerCase()]
 

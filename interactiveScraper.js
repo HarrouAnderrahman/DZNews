@@ -29,7 +29,9 @@ async function interactiveCLI() {
             message: 'Please type the date that you want the scraper to stop on :',
             validate (date) {
                 const validDate = new Date(date)
-                const valid = !isNaN(validDate.getTime()) && date.length === 10;
+                const now = new Date
+                const valid = !isNaN(validDate.getTime()) && date.length === 10 && now > validDate;
+                if (now < validDate) return 'Invalid Date, The choosen Date must be before the current date'
                 return valid || 'Invalid Date, The Date has to be formatted as : YYYY-MM-DD'
                 
             }
