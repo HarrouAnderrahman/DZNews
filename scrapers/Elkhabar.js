@@ -1,9 +1,8 @@
 const puppeteer = require("puppeteer");
-const axios = require("axios");
 const cheerio = require("cheerio");
 const exportingData = require("./utils/saveHandling");
 const { dateToString, transformDate } = require("./utils/dateHandling");
-const axiosHeader = require("./utils/axiosHeader");
+const axiosGetRetry = require("./utils/axiosConfig");
 
 const categories = {
   // easier and more efficient to list categories this way
@@ -27,9 +26,10 @@ async function run(choosenDate, choosenCategory, saveOption) {
 
     console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`);
 
-    browser = await puppeteer.launch(
+    browser = await puppeteer
+      .launch
       // { headless: false } // <-- For debugging
-    );
+      ();
 
     console.log("Opening Browser ...");
 
@@ -45,7 +45,9 @@ async function run(choosenDate, choosenCategory, saveOption) {
       }
     }); // <-- The reason is to make it load faster
 
-    await page.goto(`https://www.elkhabar.com/${choosenCategory}/`, {timeout:60000});
+    await page.goto(`https://www.elkhabar.com/${choosenCategory}/`, {
+      timeout: 60000,
+    });
 
     console.log("Accessing elkhabar ...");
 
@@ -101,7 +103,10 @@ async function run(choosenDate, choosenCategory, saveOption) {
               const title =
                 articl.querySelector("h3")?.textContent.trim() || "";
               const link = articl.querySelector("h3 > a")?.href || "";
-              const date = articl.querySelector("div > ul > li:nth-child(1)")?.textContent.trim() || "";
+              const date =
+                articl
+                  .querySelector("div > ul > li:nth-child(1)")
+                  ?.textContent.trim() || "";
               return { title, link, date };
             })
         );
@@ -113,40 +118,35 @@ async function run(choosenDate, choosenCategory, saveOption) {
                 articl.querySelector("h3")?.textContent.trim() || "";
               const link = articl.querySelector("h3 > a")?.href || "";
               const date =
-                articl.querySelector("p")?.textContent.trim().slice(0, 10) || "";
+                articl.querySelector("p")?.textContent.trim().slice(0, 10) ||
+                "";
               return { title, link, date };
             })
         );
         let scrapedArticles = topCards.concat(bottomCards); // combining the 2 arrays
         for (let articl of scrapedArticles) {
           if (articl.link) {
-            const response = await axios.get(articl.link, axiosHeader);
+            const response = await axiosGetRetry(articl.link);
             const dateObj = await transformDate(articl.date); // so i can compare it
             // The issue: the scraper is scraping every link including the ones that passed the choosenDate and i need to fix that
             if (choosenDate <= dateObj) {
-              if (response.status == 200) {
-                console.log("scraping content...");
-                const html = await response.data;
-                const $ = cheerio.load(html);
-                const contentData = $(".width-635.align-center")
-                  .text()
-                  .trim();
-                let author = $(".mobile-compact .author").text();
-                if (author.trim() == false) {
-                  author = "Unknown author";
-                } // for more organized look
-                scrapedData.push({
-                  title: articl.title,
-                  link: articl.link,
-                  date: articl.date,
-                  content: {
-                    contentData: contentData,
-                    author: author,
-                  },
-                });
-              } else {
-                throw new Error("Failed scraping the context");
-              }
+              console.log("scraping content...");
+              const html = await response.data;
+              const $ = cheerio.load(html);
+              const contentData = $(".width-635.align-center").text().trim();
+              let author = $(".mobile-compact .author").text();
+              if (author.trim() == false) {
+                author = "Unknown author";
+              } // for more organized look
+              scrapedData.push({
+                title: articl.title,
+                link: articl.link,
+                date: articl.date,
+                content: {
+                  contentData: contentData,
+                  author: author,
+                },
+              });
             }
           } else {
             continue;
