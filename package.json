@@ -1,6 +1,6 @@
 {
   "name": "dznews",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "DZNews is a node CLI tool for scraping and collecting news articles from major Algerian news sources.",
   "main": "index.js",
   "scripts": {
