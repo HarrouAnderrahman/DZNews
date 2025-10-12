@@ -76,7 +76,8 @@ async function run(choosenDate, choosenCategory, saveOption) {
       saveOption
     );
   } catch (error) {
-    console.error(error);
+    // console.error(error.message);
+    throw error
   }
 }
 // const chdate = new Date("2025/10/02")

@@ -67,7 +67,8 @@ async function run(choosenDate, choosenCategory, saveOption) {
       saveOption
     );
   } catch (error) {
-    console.error(error);
+    // console.error(error.message);
+    throw error
   }
 }
 module.exports = { run, categories }; // <-- so i can manage it in scraperManager

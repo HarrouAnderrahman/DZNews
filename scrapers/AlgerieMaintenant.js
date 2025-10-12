@@ -144,7 +144,8 @@ async function run(choosenDate, choosenCategory, saveOption) {
       saveOption
     );
   } catch (error) {
-    console.error(error.message);
+    // console.error(error.message);
+    throw error
   } finally {
     await browser.close();
   }

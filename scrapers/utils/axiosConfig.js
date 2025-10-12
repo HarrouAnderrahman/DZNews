@@ -22,11 +22,11 @@ module.exports = async function axiosGetRetry(url, maxAttempts = 5, delay = 5000
                     await new Promise(res => setTimeout(res, delay))
                 }
             } else if (error.response) {
-                throw new Error(`HTTP Error : status : ${error.response.status}`)
+                throw new Error(`HTTP Error : status = ${error.response.status} on : ${url}`)
             } else {
                 throw error
             }
         }
     }
-    throw new Error(`Network Error : Failed after ${maxAttempts} , on : ${url}`)
+    throw new Error(`Network Error : Failed after ${maxAttempts} attempts on : ${url}`)
 } 
