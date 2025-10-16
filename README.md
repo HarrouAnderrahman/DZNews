@@ -14,10 +14,22 @@ DZNews-CLI is a command-line tool for scraping Algerian news articles from multi
 ## Table of Contents
 
 - [Features](#features)
-- [Demo](#demo)
-- [Supported Sources](#supported-sources)
 - [Installation](#installation)
-- [Usage](#usage)
+    - [Install Globally via npm](#install-globally-via-npm)
+    - [Run Without Installing (npx)](#run-without-installing-npx)
+    - [Manual Installation via GitHub](#manual-installation-via-github)
+- [Usage Guide](#usage-guide)
+    - [List Sources](#list-sources)
+    - [List Categories](#list-categories)
+    - [Scrape Articles](#scrape-articles)
+    - [Export Options](#export-options)
+    - [Interactive Mode](#interactive-mode)
+    - [Output Files](#output-files)
+- [Supported Sources and Categories](#supported-sources-and-categories)
+- [Troubleshooting & Error Handling](#troubleshooting--error-handling)
+- [Screenshots and Demos](#screenshots-and-demos)
+- [Testing](#testing)
+- [Changelog](#changelog)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -25,102 +37,271 @@ DZNews-CLI is a command-line tool for scraping Algerian news articles from multi
 
 ## Features
 
-- **Scrape articles** from supported Algerian news sources by category and date.
-- **Interactive CLI mode** for beginners—guided, user-friendly prompts.
-- **Alias support** for faster command access (e.g., `dznews i` for interactive mode).
-- **List available sources** and their categories.
-- **Custom output options**: save as **JSON** (default) or **CSV** files.
-- **CSV export** with a custom converter (no third-party CSV lib needed).
-- **Enhanced UX**: colored output, clear error messages, and strict date validation.
-- **Future-proof:** modular code for easy expansion and library usage.
-
----
-
-## Demo
-
-### CLI Commands Overview
-![DZNews-CLI commands demo](./assets/Commands%20demo.gif)
-
-### Interactive Mode
-Beginner-friendly guided scraping:
-![DZNews-CLI interactive mode demo](./assets/Interactive%20CLI%20demo.gif)
-
-### CSV Export Example
-See how scraped data looks in CSV format:
-![DZNews-CLI CSV screenshot](./assets/CSV%20Screenshot.png)
-
----
-
-## Supported Sources
-
-- [Ennahar](https://www.ennaharonline.com/)
-- [Elbilad](https://www.elbilad.net/)
-- [Algerie Maintenant](https://algeriemaintenant.dz/)
-- [Echourouk Online](https://www.echoroukonline.com/)
-- [Dzair-Tube](https://www.dzair-tube.dz/)
-- [Elkhabar](https://www.elkhabar.com/)
+- Scrape articles from several Algerian news websites
+- Filter by date and category
+- Export data as **JSON** or **CSV**
+- Command-line interface with options for output directory and format
+- Interactive mode for guided scraping
+- Extensible for additional sources and categories
 
 ---
 
 ## Installation
 
-**Requirements:**  
-- Node.js v16.0.0 or higher
+### Install Globally via npm
 
-Install from npm (recommended for beta users: use locally in your project):
+Recommended for most users.  
+Requires Node.js v16+.
 
-```sh
-npm install dznews
+```bash
+npm install -g dznews
 ```
 
-**Note:**  
-Global installation (`npm install -g dznews`) is not recommended while in beta.
+Now you can run `dznews` as a global command from any directory.
+
+### Run Without Installing (npx)
+
+If you prefer not to install globally, you can use:
+
+```bash
+npx dznews <command>
+```
+Example:
+```bash
+npx dznews scrape ennahar 2025-10-09 sports --export csv
+```
+
+### Manual Installation via GitHub
+
+If you want the latest source or to contribute:
+
+```bash
+git clone https://github.com/HarrouAnderrahman/DZNews.git
+cd DZNews
+npm install
+npm link
+```
+Now you can use `dznews` globally.
 
 ---
 
-## Usage
+## Usage Guide
 
-### List all available news sources
-```sh
-npx dznews sources
+### List Sources
+
+Show all available news sources:
+
+```bash
+dznews sources
 ```
 
-### List categories for a specific source
-```sh
-npx dznews cat <source>
-# Example:
-npx dznews cat ennahar
+### List Categories
+
+Show all categories for a given source:
+
+```bash
+dznews cat <source>
+dznews cat ennahar
 ```
 
-### Scrape articles from a source (with export option)
-```sh
-npx dznews scrape <source> <date> <category> [options]
-# Example (JSON, default):
-npx dznews scrape ennahar 2025-09-28 sports
+### Scrape Articles
 
-# Example (CSV export):
-npx dznews scrape ennahar 2025-09-28 sports --export csv
-```
-- Date format: `YYYY-MM-DD`
-- Scraped data will be saved in the `scrapedData/` directory as a JSON file by default, or as a CSV file if `--export csv` is used.
+Scrape articles by source, date, and category:
 
-### Use the Interactive Mode
-```sh
-npx dznews interactive
-# or
-npx dznews i
+```bash
+dznews scrape <source> <date> <category> [options]
 ```
-You’ll be guided through source, category, date, and export format selection.
+
+**Examples:**
+```bash
+dznews scrape ennahar 2025-10-09 sports --export json
+dznews scrape elbilad 2025-10-09 politics --export csv
+```
+
+- `<source>`: News site to scrape (see [Supported Sources and Categories](#supported-sources-and-categories))
+- `<date>`: Date to collect articles until (format: `YYYY-MM-DD`)
+- `<category>`: News category (see categories for your source)
+- `--export` or `-e`: Output format (`json` or `csv`)
+- Output is saved in the `scrapedData/` directory.
+
+### Export Options
+
+- Default is JSON:  
+  Output file: `scrapedData/EnnaharData_2025-10-09_sports.json`
+- Use `--export csv` or `-e` for CSV:  
+  Output file: `scrapedData/EnnaharData_2025-10-09_sports.csv`
+
+### Interactive Mode
+
+For guided, beginner-friendly scraping:
+
+```bash
+dznews interactive
+```
+
+You'll be prompted for source, category, date, and format.
+
+Demo:
+![Interactive CLI Demo](assets/Interactive%20CLI%20demo.gif)
+
+### Output Files
+
+All files are saved in the `scrapedData/` directory.  
+Check the output for filenames like:
+
+- `EnnaharData_2025-10-09_sports.json`
+- `ElbiladData_2025-10-09_politics.csv`
+
+---
+
+## Supported Sources and Categories
+
+To list all supported sources:
+
+```bash
+dznews sources
+```
+
+DZNews currently supports the following Algerian news sites:
+
+
+- [Ennahar](https://www.ennaharonline.com/)
+
+- [Elbilad](https://www.elbilad.net/)
+
+- [Algerie Maintenant](https://algeriemaintenant.dz/)
+
+- [Echourouk Online](https://www.echoroukonline.com/)
+
+- [Dzair-Tube](https://www.dzair-tube.dz/)
+
+- [Elkhabar](https://www.elkhabar.com/)
+
+### Unified Category Keywords
+
+All sites use the same keyword mapping for categories in DZNews.  
+**Note:** *Not every site has every category; some categories are only available on certain sites due to differences in their structure and coverage.*
+
+| Category Keyword | Description |
+|------------------|-------------|
+| national         | National news |
+| sports           | Sports |
+| international    | International news |
+| politics         | Politics |
+| security         | Security |
+| economy          | Economy/Business |
+| islam            | Islamic/Religion |
+| society          | Society |
+| hightech         | Technology/Science |
+| culture          | Culture/Arts |
+| ...              | More categories may be supported in future releases |
+
+To see which categories are available for a specific source, run:
+
+```bash
+dznews cat <source>
+```
+
+For example:
+
+```bash
+dznews cat elkhabar
+```
+
+---
+
+## Troubleshooting & Error Handling
+
+### Common Issues and Solutions
+
+- **Unknown source or category:**  
+  Run `dznews sources` or `dznews cat <source>` to see valid inputs.
+- **Date format errors:**  
+  Dates must be `YYYY-MM-DD` and before today.  
+  Example: `2025-10-09`
+- **No output file created:**  
+  Check for errors in the console. Make sure `scrapedData/` exists and you have write permissions.
+- **Network errors:**  
+  Ensure you have internet access. Some sites may block scraping; try again later.
+- **Permission errors (Linux/Mac):**  
+  Use `sudo npm install -g dznews` if you see permissions denied.
+- **Network errors:**  
+  DZNews now automatically retries failed network requests up to 5 times by default.  
+  You can adjust the maximum retry attempts and delay in `scrapers/utils/axiosConfig.js` by changing the `maxAttempts` and `delay` parameters.
+
+### Getting Help
+
+- Run with `--help` for usage info:
+  ```bash
+  dznews --help
+  ```
+- Open an issue in the [GitHub repo](https://github.com/HarrouAnderrahman/DZNews/issues) if you encounter problems.
+
+---
+
+## Screenshots and Demos
+
+**Command Demo:**
+
+![Commands Demo](assets/Commands%20demo.gif)
+
+**Interactive CLI:**
+
+![Interactive CLI Demo](assets/Interactive%20CLI%20demo.gif)
+
+**CSV Output Example:**
+
+![CSV Screenshot](assets/CSV%20Screenshot.png)
+
+---
+
+## Testing
+
+To run the included smoke test (scrapes a random category from each source):
+
+```bash
+npm test
+```
+or
+```bash
+node tests/smokeTest.js
+```
+
+---
+
+## Changelog
+
+### 1.0.0 (2025-10-16)
+
+- Initial stable release
+- Added a simple smoke test
+- Modular architecture for easy extension
+- Improved error handling
+- **Added network error handling and retry logic in `axiosConfig.js`**  
+  - If a network error occurs during scraping, DZNews will automatically retry requests up to 5 times (default).  
+  - Maximum attempts and retry delay can be customized in code (`maxAttempts`, `delay`).
 
 ---
 
 ## Contributing
 
-Pull requests and suggestions are welcome!  
-Feel free to open issues for bugs, feature requests, or questions.
+Contributions are welcome.
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Open a pull request
+
+Report bugs or request features via [issues](https://github.com/HarrouAnderrahman/DZNews/issues).
 
 ---
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## Author
+
+Developed by [Harrou Abderrahman](https://github.com/HarrouAnderrahman)
