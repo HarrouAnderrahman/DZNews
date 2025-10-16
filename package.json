@@ -1,10 +1,10 @@
 {
   "name": "dznews",
-  "version": "0.7.1",
+  "version": "1.0.0",
   "description": "DZNews is a node CLI tool for scraping and collecting news articles from major Algerian news sources.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node tests/smokeTest.js",
     "start": "node index.js"
   },
   "repository": {
