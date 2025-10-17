@@ -41,7 +41,7 @@ program // listing the categories
 
 program // the scraping command
   .command('scrape <source> <date> <category>')
-  .description('scrapes a specific source with a choosen source until a choosen date ')
+  .description('scrapes a source with a specific category until a choosen date ')
   .option('-e, --export <option>', 'selection export option : csv, json')
   .action(async (source, date, category, options) =>{
     scrape(source, date, category, options.export)
