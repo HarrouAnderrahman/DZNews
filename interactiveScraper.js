@@ -42,7 +42,6 @@ async function interactiveCLI() {
             message: 'What format do you want to save your data as :',
             choices: ['JSON', 'CSV']
         }
-
     ]
 
     inquirer.prompt(questions).then((answer) => {

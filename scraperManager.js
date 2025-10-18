@@ -6,6 +6,7 @@ const Echouroukscraper = require("./scrapers/echoroukonline")
 const DZTube = require("./scrapers/DZTube")
 const Elkhabar = require("./scrapers/Elkhabar")
 const chalk = require('chalk')
+const fs = require ('fs')
 
 const scrapers = {
     ennahar:Ennaharscraper.run,
@@ -25,11 +26,11 @@ const categories = {
     elkhabar:Elkhabar.categories
 }
 
-async function scrape(source, date, category, saveOption) { 
+async function scrape(source, date, category, saveOption, dir) { 
     try {
         const choosenSource = source.toLowerCase()
         const scraper = scrapers[choosenSource];
-        if (!scraper) {
+        if (!scraper) { // validating source
             throw new Error (
                 `Unknown source : ${source} ` + 
                 chalk.reset("\n Please run : ") +
@@ -41,7 +42,7 @@ async function scrape(source, date, category, saveOption) {
         const now = new Date
         dateObj.setHours(0,0,0,0);
 
-        if (isNaN(dateObj.getTime()) || date.length !== 10) {
+        if (isNaN(dateObj.getTime()) || date.length !== 10) { // validating date
             throw new Error (
                 `Invalid date: ${date}` +
                 chalk.reset("\n Dates should be formatted as : YYYY/MM/DD ")
@@ -56,14 +57,18 @@ async function scrape(source, date, category, saveOption) {
 
         const choosenCategory = categories[choosenSource][category.toLowerCase()]
 
-        if (!choosenCategory) {
+        if (!choosenCategory) { // validating cat
             throw new Error (
                 `Unknown category: ${category}` +
                 chalk.reset("\n Please run : ") +
                 chalk.inverse("dznews cat <source>")
             )
         }
-        return await scraper(dateObj, choosenCategory, saveOption) // if you don't understand what's going on here , please check the code in ./scrapers
+        const dirValidation = await fs.promises.stat(dir) // validate directory
+        if(!dirValidation.isDirectory()) {
+            throw new Error (`${dir} is not a directory .`)
+        }
+        return await scraper(dateObj, choosenCategory, saveOption, dir) // if you don't understand what's going on here , please check the code in ./scrapers
 
     } catch (error) {
         console.error(chalk.bold.red(error) + "\n For more info please check the docs")

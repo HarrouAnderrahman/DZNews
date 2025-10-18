@@ -184,7 +184,7 @@ All sites use the same keyword mapping for categories in DZNews.
 
 | Category Keyword | Description |
 |------------------|-------------|
-| national         | National news |
+| national, algeria         | National news |
 | sports           | Sports |
 | international    | International news |
 | politics         | Politics |

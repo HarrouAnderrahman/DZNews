@@ -13,7 +13,7 @@ function csvEscape(content) { // for fixing issue : https://github.com/HarrouAnd
 }
 
 
-async function exportingData(fileName , scrapedData, option) { // the main scraping function
+async function exportingData(fileName , scrapedData, option, dirStr) { // the main Saving function
     try {
         if (!option) {
             option = 'json'
@@ -21,8 +21,14 @@ async function exportingData(fileName , scrapedData, option) { // the main scrap
         if(option.toLowerCase() !== 'json' && option.toLowerCase() !== 'csv'){
             throw new Error('invalid export option')
         }
-        const filePath = path.join(__dirname, "..", "..", "/scrapedData/")
-        const fileData = path.join(__dirname, "..", "..", "/scrapedData/", `${fileName}.${option}`) 
+        let dir;
+        if (!dirStr || dirStr === "") {
+            dir = path.join(__dirname, "..", "..")
+        } else {
+            dir = path.resolve(dirStr)
+        }
+        const filePath = path.join(dir, "scrapedData")
+        const fileData = path.join(filePath, `${fileName}.${option}`) 
         fs.mkdir(filePath, {recursive: true}, 
             (err)=>{
                 if (err) throw err

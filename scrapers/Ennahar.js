@@ -13,7 +13,7 @@ const categories = {
   society: "society",
 };
 
-async function run(choosenDate, choosenCategory, saveOption) {
+async function run(choosenDate, choosenCategory, saveOption, dir) {
   try {
     const scrapedData = [];
     const dateStr = await dateToString(choosenDate);
@@ -68,7 +68,8 @@ async function run(choosenDate, choosenCategory, saveOption) {
     await exportingData(
       `EnnaharData_${dateStr}_${choosenCategory}`,
       scrapedData,
-      saveOption
+      saveOption,
+      dir
     );
   } catch (error) {
     // console.error(error.message);

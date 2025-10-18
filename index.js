@@ -42,9 +42,10 @@ program // listing the categories
 program // the scraping command
   .command('scrape <source> <date> <category>')
   .description('scrapes a source with a specific category until a choosen date ')
-  .option('-e, --export <option>', 'selection export option : csv, json')
+  .option('-e, --export <option>', 'select an export option : csv, json')
+  .option('-d, --directory <option>', 'Choose where you want to save the data')
   .action(async (source, date, category, options) =>{
-    scrape(source, date, category, options.export)
+    scrape(source, date, category, options.export, options.directory)
   });
 
 program // the Interactive mode
