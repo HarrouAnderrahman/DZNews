@@ -23,6 +23,7 @@ DZNews-CLI is a command-line tool for scraping Algerian news articles from multi
     - [List Categories](#list-categories)
     - [Scrape Articles](#scrape-articles)
     - [Export Options](#export-options)
+    - [Choosing Output Directory](#choosing-output-directory)
     - [Interactive Mode](#interactive-mode)
     - [Output Files](#output-files)
 - [Supported Sources and Categories](#supported-sources-and-categories)
@@ -41,6 +42,7 @@ DZNews-CLI is a command-line tool for scraping Algerian news articles from multi
 - Filter by date and category
 - Export data as **JSON** or **CSV**
 - Command-line interface with options for output directory and format
+- Choose custom output directory in the standard CLI mode
 - Interactive mode for guided scraping
 - Extensible for additional sources and categories
 
@@ -122,7 +124,7 @@ dznews scrape elbilad 2025-10-09 politics --export csv
 - `<date>`: Date to collect articles until (format: `YYYY-MM-DD`)
 - `<category>`: News category (see categories for your source)
 - `--export` or `-e`: Output format (`json` or `csv`)
-- Output is saved in the `scrapedData/` directory.
+- Output is saved in the `scrapedData/` directory by default.
 
 ### Export Options
 
@@ -130,6 +132,22 @@ dznews scrape elbilad 2025-10-09 politics --export csv
   Output file: `scrapedData/EnnaharData_2025-10-09_sports.json`
 - Use `--export csv` or `-e` for CSV:  
   Output file: `scrapedData/EnnaharData_2025-10-09_sports.csv`
+
+### Choosing Output Directory (Standard CLI Only)
+
+You can choose the directory where the scraped data will be saved **only in the normal CLI mode** (not in interactive mode).
+
+Add the option `--directory <path>` or `-d <path>` to the `scrape` command:
+
+```bash
+dznews scrape <source> <date> <category> --export json --directory /path/to/save/
+dznews scrape elbilad 2025-10-09 politics --export csv -d /home/user/Documents/
+```
+
+- The specified directory must exist and be a valid directory.  
+- If the directory exists, your data will be saved inside it in a `scrapedData/` subfolder.
+- If the path points to something that is not a directory, DZNews will throw an error and not save the data.
+- **Note:** The `--directory`/`-d` option is **not available in interactive mode**.
 
 ### Interactive Mode
 
@@ -146,7 +164,8 @@ Demo:
 
 ### Output Files
 
-All files are saved in the `scrapedData/` directory.  
+All files are saved in the `scrapedData/` directory inside the chosen output directory  
+(or inside the package folder by default).  
 Check the output for filenames like:
 
 - `EnnaharData_2025-10-09_sports.json`
@@ -221,6 +240,8 @@ dznews cat elkhabar
   Example: `2025-10-09`
 - **No output file created:**  
   Check for errors in the console. Make sure `scrapedData/` exists and you have write permissions.
+- **Directory errors:**  
+  If using `--directory`/`-d`, make sure the specified path exists and is a directory. Otherwise, DZNews will throw an error.
 - **Network errors:**  
   Ensure you have internet access. Some sites may block scraping; try again later.
 - **Permission errors (Linux/Mac):**  
@@ -270,6 +291,13 @@ node tests/smokeTest.js
 ---
 
 ## Changelog
+
+### 1.1.0 (2025-10-18)
+
+- Added support for custom output directory in normal CLI mode using `--directory <path>` or `-d <path>`
+- Minimal validation: Only saves data if the given directory exists and is a directory; throws an error otherwise
+- The output directory option is **not available in interactive mode**
+- Documentation updated to reflect new output directory option
 
 ### 1.0.0 (2025-10-16)
 
