@@ -13,7 +13,7 @@ const categories = {
   international: "international",
 };
 
-async function run(choosenDate, choosenCategory, saveOption) {
+async function run(choosenDate, choosenCategory, saveOption, dir) {
   const dateStr = await dateToString(choosenDate);
   console.log(`Scraping the ${choosenCategory} category, until ${dateStr}`);
   let browser;
@@ -151,7 +151,8 @@ async function run(choosenDate, choosenCategory, saveOption) {
     await exportingData(
       `ElbiladData_${dateStr}_${choosenCategory}`,
       scrapedData,
-      saveOption
+      saveOption,
+      dir
     );
   } catch (error) {
     // console.error(error.message);

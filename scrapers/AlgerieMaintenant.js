@@ -15,7 +15,7 @@ const categories = {
   international: "دولي",
 };
 
-async function run(choosenDate, choosenCategory, saveOption) {
+async function run(choosenDate, choosenCategory, saveOption, dir) {
   // same as Elbilad scraper with some changes
   let browser; // for the 'finally' block
   try {
@@ -141,7 +141,8 @@ async function run(choosenDate, choosenCategory, saveOption) {
     await exportingData(
       `AlgeriemaintenantData_${dateStr}_${choosenCategory}`,
       scrapedData,
-      saveOption
+      saveOption,
+      dir
     );
   } catch (error) {
     // console.error(error.message);

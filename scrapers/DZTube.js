@@ -12,7 +12,7 @@ const categories = {
   economy: "economie",
 };
 
-async function run(choosenDate, choosenCategory, saveOption) {
+async function run(choosenDate, choosenCategory, saveOption, dir) {
   try {
     let scrapedData = [];
     const dateStr = await dateToString(choosenDate);
@@ -64,7 +64,8 @@ async function run(choosenDate, choosenCategory, saveOption) {
     await exportingData(
       `DZ-Tube_${dateStr}_${choosenCategory}`,
       scrapedData,
-      saveOption
+      saveOption,
+      dir
     );
   } catch (error) {
     // console.error(error.message);

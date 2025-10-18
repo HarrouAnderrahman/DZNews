@@ -16,7 +16,7 @@ const categories = {
   culture: "culture",
 };
 
-async function run(choosenDate, choosenCategory, saveOption) {
+async function run(choosenDate, choosenCategory, saveOption, dir) {
   // same as Elbilad scraper with some changes
   let browser;
   try {
@@ -157,7 +157,8 @@ async function run(choosenDate, choosenCategory, saveOption) {
     await exportingData(
       `Elkhabar_${dateStr}_${choosenCategory}`,
       scrapedData,
-      saveOption
+      saveOption,
+      dir
     );
   } catch (error) {
     // console.error(error.message);
