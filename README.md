@@ -291,7 +291,8 @@ node tests/smokeTest.js
 ---
 
 ## Changelog
-
+### 1.1.1 (2025-10-18)
+- Forgot to add the choosing directory option inside all the scrapers (it was only available in ennahar scraper)
 ### 1.1.0 (2025-10-18)
 
 - Added support for custom output directory in normal CLI mode using `--directory <path>` or `-d <path>`
