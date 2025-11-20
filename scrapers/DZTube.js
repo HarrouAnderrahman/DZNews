@@ -30,7 +30,7 @@ async function run(choosenDate, choosenCategory, saveOption, dir) {
 
       for (const news of totalNews) {
         const header = $(news).find("h2").text().trim();
-        const date = $(news).find(".article-date").attr("datetime");
+        const date = $(news).find("div > div > time").attr("datetime");
         const link = $(news).find("h2 > a").attr("href"); // lets scrape this page too
 
         const pageContent = await axiosGetRetry(link); // scraping each articl link using the same technique of scraping the whole articles page
