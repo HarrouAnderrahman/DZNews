@@ -291,6 +291,10 @@ node tests/smokeTest.js
 ---
 
 ## Changelog
+### 1.1.2 (2025-11-20)
+- Fixed these bugs :
+  - Dzair-Tube wasn't scraping anymore because they changed the date element
+  - Forgot to check for a variable if it does even exist in the scraper manager which made it not usable
 ### 1.1.1 (2025-10-18)
 - Forgot to add the choosing directory option inside all the scrapers (it was only available in ennahar scraper)
 ### 1.1.0 (2025-10-18)
