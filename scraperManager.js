@@ -64,9 +64,11 @@ async function scrape(source, date, category, saveOption, dir) {
                 chalk.inverse("dznews cat <source>")
             )
         }
-        const dirValidation = await fs.promises.stat(dir) // validate directory
-        if(!dirValidation.isDirectory()) {
-            throw new Error (`${dir} is not a directory .`)
+        if (dir) {
+            const dirValidation = await fs.promises.stat(dir) // validate directory
+            if(!dirValidation.isDirectory()) {
+                throw new Error (`${dir} is not a directory .`)
+            }
         }
         return await scraper(dateObj, choosenCategory, saveOption, dir) // if you don't understand what's going on here , please check the code in ./scrapers
 
